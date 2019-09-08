@@ -8,10 +8,9 @@ import com.lawencon.linov.outsource.payload.request.SignUpRequest;
 import com.lawencon.linov.outsource.payload.response.JwtAuthenticationResponse;
 import com.lawencon.linov.outsource.payload.response.OutsourceResponse;
 import com.lawencon.linov.outsource.repository.RoleRepository;
-import com.lawencon.linov.outsource.repository.UserRepository;
 import com.lawencon.linov.outsource.security.JwtTokenProvider;
+import com.lawencon.linov.outsource.service.UserService;
 import com.lawencon.linov.outsource.util.RoleName;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,14 +33,14 @@ import java.util.Collections;
 public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider tokenProvider;
 
-    public AuthenticationController(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider) {
+    public AuthenticationController(AuthenticationManager authenticationManager, UserService userService, RoleRepository roleRepository, PasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider) {
         this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
@@ -63,12 +62,12 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        if(userRepository.existsByUsername(signUpRequest.getUsername())) {
+        if(userService.checkUserByUsername(signUpRequest.getUsername())) {
             return new ResponseEntity(new OutsourceResponse(false, "Username is already taken!"),
                     HttpStatus.BAD_REQUEST);
         }
 
-        if(userRepository.existsByEmail(signUpRequest.getEmail())) {
+        if(userService.checkUserByEmail(signUpRequest.getEmail())) {
             return new ResponseEntity(new OutsourceResponse(false, "Email Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
@@ -80,7 +79,7 @@ public class AuthenticationController {
         Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
                 .orElseThrow(() -> new AppException("User Role not set."));
         user.setRoles(Collections.singleton(userRole));
-        User result = userRepository.save(user);
+        User result = userService.crateUser(user);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/api/users/{username}")

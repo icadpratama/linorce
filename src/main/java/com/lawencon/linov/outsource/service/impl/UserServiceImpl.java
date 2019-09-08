@@ -1,5 +1,6 @@
 package com.lawencon.linov.outsource.service.impl;
 
+import com.lawencon.linov.outsource.model.authentication.User;
 import com.lawencon.linov.outsource.repository.UserRepository;
 import com.lawencon.linov.outsource.service.UserService;
 import org.springframework.stereotype.Service;
@@ -21,5 +22,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean checkUserByEmail(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public User crateUser(User user) {
+        return userRepository.save(user);
     }
 }
