@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.nio.file.attribute.UserPrincipal;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -33,6 +32,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findById(id).orElseThrow(
                 () -> new ResorceNotFoundException("User", "id", id)
         )
-        return UserPrincipa.create();
+        return UserPrincipal.create(user);
     }
 }
