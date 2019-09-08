@@ -30,3 +30,12 @@ CREATE TABLE user_roles (
 
 INSERT INTO roles(name) values ('ROLE_ADMIN');
 INSERT INTO roles(name) values ('ROLE_USER');
+
+CREATE TABLE item_requests(
+    id SERIAL8 NOT NULL,
+    name VARCHAR(50),
+    quantity INT,
+    details VARCHAR(250),
+    documents VARCHAR(250),
+    PRIMARY KEY (id)
+);
