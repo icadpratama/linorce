@@ -1,4 +1,4 @@
-package com.lawencon.linov.outsource.model;
+package com.lawencon.linov.outsource.model.authentication;
 
 import com.lawencon.linov.outsource.model.audit.DateAudit;
 import org.hibernate.annotations.NaturalId;
@@ -36,16 +36,19 @@ public class User extends DateAudit {
 
     @NotBlank
     @Size(max = 15)
+    @Column(name = "username")
     private String username;
 
     @NaturalId
     @NotBlank(message = "email can't be blank")
     @Size(max = 100, message = "email max length is 100")
     @Email(message = "email is not valid")
+    @Column(name = "email")
     private String email;
 
     @NotBlank(message = "password can't be blank")
     @Size(max = 100, message = "password max length is 100")
+    @Column(name = "password")
     private String password;
 
     public User() {
