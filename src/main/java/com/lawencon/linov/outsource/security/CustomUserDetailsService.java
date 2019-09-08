@@ -1,5 +1,6 @@
 package com.lawencon.linov.outsource.security;
 
+import com.lawencon.linov.outsource.exception.ResourceNotFoundException;
 import com.lawencon.linov.outsource.model.authentication.User;
 import com.lawencon.linov.outsource.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String usernameOrEmail){
         User user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User not found with username or email: " + usernameOrEmail));
@@ -30,8 +31,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserById(Long id){
         User user = userRepository.findById(id).orElseThrow(
-                () -> new ResorceNotFoundException("User", "id", id)
-        )
+                () -> new ResourceNotFoundException("User", "id", id)
+        );
+
         return UserPrincipal.create(user);
     }
 }
