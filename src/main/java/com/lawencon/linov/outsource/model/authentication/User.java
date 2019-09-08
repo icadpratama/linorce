@@ -1,7 +1,6 @@
 package com.lawencon.linov.outsource.model.authentication;
 
 import com.lawencon.linov.outsource.model.audit.DateAudit;
-import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
