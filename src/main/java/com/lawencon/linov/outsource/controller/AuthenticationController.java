@@ -7,7 +7,6 @@ import com.lawencon.linov.outsource.payload.request.LoginRequest;
 import com.lawencon.linov.outsource.payload.request.SignUpRequest;
 import com.lawencon.linov.outsource.payload.response.JwtAuthenticationResponse;
 import com.lawencon.linov.outsource.payload.response.OutsourceResponse;
-import com.lawencon.linov.outsource.repository.RoleRepository;
 import com.lawencon.linov.outsource.security.JwtTokenProvider;
 import com.lawencon.linov.outsource.service.RoleService;
 import com.lawencon.linov.outsource.service.UserService;
