@@ -5,6 +5,8 @@ import com.lawencon.linov.outsource.repository.UserRepository;
 import com.lawencon.linov.outsource.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -27,5 +29,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User crateUser(User user) {
         return userRepository.save(user);
+    }
+
+    @Override
+    public Optional<User> userListByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 }
