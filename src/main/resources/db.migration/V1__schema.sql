@@ -28,8 +28,8 @@ CREATE TABLE user_roles (
     CONSTRAINT fk_user_roles_user_id FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-INSERT INTO roles(name) values ('ROLE_ADMIN');
-INSERT INTO roles(name) values ('ROLE_USER');
+-- INSERT INTO roles(id, name) values (1, 'ROLE_ADMIN');
+-- INSERT INTO roles(id, name) values (2, 'ROLE_USER');
 
 CREATE TABLE item_requests(
     id SERIAL8 NOT NULL,
@@ -37,5 +37,9 @@ CREATE TABLE item_requests(
     quantity INT,
     details VARCHAR(250),
     documents VARCHAR(250),
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    created_by INT8 DEFAULT NULL,
+    updated_by INT8 DEFAULT NULL,
     PRIMARY KEY (id)
 );

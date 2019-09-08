@@ -1,12 +1,14 @@
 package com.lawencon.linov.outsource.model.approval;
 
+import com.lawencon.linov.outsource.model.audit.UserDateAudit;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "item_requests")
-public class ItemRequest {
+public class ItemRequest extends UserDateAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
