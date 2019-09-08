@@ -6,5 +6,5 @@ import com.lawencon.linov.outsource.util.RoleName;
 import java.util.Optional;
 
 public interface RoleService {
-    Optional<Role> findRole(RoleName name);
+    Optional<Role> setRole(RoleName name);
 }

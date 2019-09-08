@@ -9,6 +9,7 @@ import com.lawencon.linov.outsource.payload.response.JwtAuthenticationResponse;
 import com.lawencon.linov.outsource.payload.response.OutsourceResponse;
 import com.lawencon.linov.outsource.repository.RoleRepository;
 import com.lawencon.linov.outsource.security.JwtTokenProvider;
+import com.lawencon.linov.outsource.service.RoleService;
 import com.lawencon.linov.outsource.service.UserService;
 import com.lawencon.linov.outsource.util.RoleName;
 import org.springframework.http.HttpStatus;
@@ -34,14 +35,14 @@ public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
-    private final RoleRepository roleRepository;
+    private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider tokenProvider;
 
-    public AuthenticationController(AuthenticationManager authenticationManager, UserService userService, RoleRepository roleRepository, PasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider) {
+    public AuthenticationController(AuthenticationManager authenticationManager, UserService userService, RoleService roleService, PasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
-        this.roleRepository = roleRepository;
+        this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
     }
@@ -76,7 +77,7 @@ public class AuthenticationController {
         User user = new User(signUpRequest.getFirstName(), signUpRequest.getFirstName(), signUpRequest.getUsername(),
                 signUpRequest.getEmail(), signUpRequest.getPassword());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+        Role userRole = roleService.setRole(RoleName.ROLE_USER)
                 .orElseThrow(() -> new AppException("User Role not set."));
         user.setRoles(Collections.singleton(userRole));
         User result = userService.crateUser(user);
