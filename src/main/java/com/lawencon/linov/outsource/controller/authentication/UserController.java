@@ -1,4 +1,4 @@
-package com.lawencon.linov.outsource.controller;
+package com.lawencon.linov.outsource.controller.authentication;
 
 import com.lawencon.linov.outsource.exception.ResourceNotFoundException;
 import com.lawencon.linov.outsource.model.authentication.User;
