@@ -30,7 +30,7 @@ public class ItemRequestController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity getItemRequest(@CurrentUser UserPrincipal currentUser,
                                          @RequestParam(value = "page") Integer page,
                                          @RequestParam(value = "size") Integer size,

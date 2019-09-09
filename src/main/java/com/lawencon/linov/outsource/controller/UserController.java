@@ -25,7 +25,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_HR')")
     public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
         UserSummary userSummary = new UserSummary(currentUser.getId(), currentUser.getUsername(), currentUser.getFirstName(), currentUser.getLastName());
         return userSummary;
@@ -33,17 +33,18 @@ public class UserController {
 
     @GetMapping("/checkUsernameAvailability")
     public UserIdentityAvailability checkUsernameAvailability(@RequestParam(value = "username") String username) {
-        Boolean isAvailable = !userService.checkUserByUsername(username);
+        Boolean isAvailable = userService.checkUserByUsername(username);
         return new UserIdentityAvailability(isAvailable);
     }
 
     @GetMapping("/checkEmailAvailability")
     public UserIdentityAvailability checkEmailAvailability(@RequestParam(value = "email") String email) {
-        Boolean isAvailable = !userService.checkUserByEmail(email);
+        Boolean isAvailable = userService.checkUserByEmail(email);
         return new UserIdentityAvailability(isAvailable);
     }
 
     @GetMapping("/{username}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public UserProfile getUserProfile(@PathVariable(value = "username") String username) {
         User user = userService.userListByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));

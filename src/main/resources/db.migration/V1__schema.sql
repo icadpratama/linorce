@@ -28,9 +28,6 @@ CREATE TABLE user_roles (
     CONSTRAINT fk_user_roles_user_id FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
--- INSERT INTO roles(id, name) values (1, 'ROLE_ADMIN');
--- INSERT INTO roles(id, name) values (2, 'ROLE_USER');
-
 CREATE TABLE item_requests(
     id SERIAL8 NOT NULL,
     name VARCHAR(50),
@@ -43,3 +40,7 @@ CREATE TABLE item_requests(
     updated_by INT8 DEFAULT NULL,
     PRIMARY KEY (id)
 );
+
+-- INSERT INTO roles(id, name) values (1, 'ROLE_ADMIN');
+-- INSERT INTO roles(id, name) values (2, 'ROLE_USER');
+-- INSERT INTO roles(id, name) values (3, 'ROLE_HR');
