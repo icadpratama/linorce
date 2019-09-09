@@ -2,23 +2,30 @@ package com.lawencon.linov.outsource.util;
 
 import io.minio.MinioClient;
 import io.minio.errors.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CommonUtil {
 
-    @Value("")
+    @Value("${minio.endpoint}")
     private static String endpoint;
 
-    @Value("")
+    @Value("${minio.access.key}")
     private static String accessKey;
 
-    @Value("")
+    @Value("${minio.secret.key}")
     private static String secretKey;
+
+    private static final Logger logger = LoggerFactory.getLogger(CommonUtil.class);
 
     public static boolean isEmpty(String s){
 
@@ -41,9 +48,9 @@ public class CommonUtil {
         return true;
     }
 
-    public static void FileUpload(String bucketName, String objectName, String fileName) {
+    public static void fileUpload(String bucketName, String objectName, InputStream data, Long size, String contentType) {
         try {
-            MinioClient minioClient = new MinioClient(endpoint, accessKey, secretKey);
+            MinioClient minioClient = new MinioClient("http://127.0.0.1/", 9000, "3Y8GENT45UARZ2949BT3", "k2kl4Zu+dlUHe+RaZPoxqoP9+ddG9rLVlEJ3WIy+");
 
             boolean found = minioClient.bucketExists(bucketName);
 
@@ -51,43 +58,15 @@ public class CommonUtil {
                 minioClient.makeBucket(bucketName);
             }
 
-            minioClient.putObject(bucketName,objectName, fileName);
-//            java.lang.String bucketName,
-//            java.lang.String objectName,
-//            java.lang.Object data,
-//            int length,
-//            java.util.Map<java.lang.String,java.lang.String> headerMap,
-//            java.lang.String uploadId,
-//            int partNumber
-        } catch (InvalidEndpointException e) {
-            e.printStackTrace();
-        } catch (InvalidPortException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (InsufficientDataException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoResponseException e) {
-            e.printStackTrace();
-        } catch (InvalidResponseException e) {
-            e.printStackTrace();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (InvalidArgumentException e) {
-            e.printStackTrace();
-        } catch (InvalidBucketNameException e) {
-            e.printStackTrace();
-        } catch (ErrorResponseException e) {
-            e.printStackTrace();
-        } catch (InternalException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (RegionConflictException e) {
-            e.printStackTrace();
+            Map<String, String> headerMap = new HashMap<>();
+            headerMap.put("Content-Type", contentType);
+            minioClient.putObject(bucketName,objectName, data, size, headerMap, null, contentType);
+        } catch (InvalidEndpointException | InvalidPortException | InvalidKeyException | InsufficientDataException | NoSuchAlgorithmException | NoResponseException | InvalidResponseException | XmlPullParserException | InvalidArgumentException | InvalidBucketNameException | ErrorResponseException | InternalException | IOException | RegionConflictException e) {
+            logger.error(e.getMessage());
         }
+    }
+
+    public static void downloadFile(){
 
     }
 }

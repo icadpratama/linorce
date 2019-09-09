@@ -1,22 +1,30 @@
 package com.lawencon.linov.outsource.controller.approval;
 
+import com.lawencon.linov.outsource.model.approval.ItemRequest;
+import com.lawencon.linov.outsource.payload.request.ItemReqRequest;
+import com.lawencon.linov.outsource.payload.response.OutsourceResponse;
 import com.lawencon.linov.outsource.security.CurrentUser;
 import com.lawencon.linov.outsource.security.UserPrincipal;
 import com.lawencon.linov.outsource.service.ItemRequestService;
 import com.lawencon.linov.outsource.service.UserService;
+import com.lawencon.linov.outsource.util.CommonUtil;
 import com.lawencon.linov.outsource.util.PageAndSort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import javax.validation.Valid;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
 
 @RestController
-@RequestMapping("item_request")
+@RequestMapping("/approval/item_request")
 public class ItemRequestController {
 
     private final ItemRequestService requestService;
@@ -30,12 +38,11 @@ public class ItemRequestController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity getItemRequest(@CurrentUser UserPrincipal currentUser,
-                                         @RequestParam(value = "page") Integer page,
-                                         @RequestParam(value = "size") Integer size,
+                                         @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                         @RequestParam(value = "size", defaultValue = "5") Integer size,
                                          @RequestParam(value = "direction", defaultValue = "ASC") String direction,
-                                         @RequestParam(value = "field") String column){
+                                         @RequestParam(value = "field", defaultValue = "name") String column){
 
         PageAndSort model = new PageAndSort();
         model.setPage(page);
@@ -45,5 +52,32 @@ public class ItemRequestController {
 
         Page result = requestService.getAllItemRequests(model);
         return ResponseEntity.ok(result);
+    }
+
+    @PostMapping
+//    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    public ResponseEntity createPoll(
+            @RequestParam(name = "name") String name,
+            @RequestParam(name = "description") String description,
+                                     @RequestParam(value = "quantity") Integer quantity,
+                                     @RequestParam(name = "file") MultipartFile file) throws IOException {
+
+        String contentType = file.getContentType();
+        InputStream data = file.getInputStream();
+        String objectName = file.getOriginalFilename();
+        Long size = file.getSize();
+
+        ItemReqRequest itemRequest = new ItemReqRequest(name, quantity, description, objectName);
+
+        ItemRequest request = requestService.createItemRequest(itemRequest);
+
+        CommonUtil.fileUpload("item-request", objectName, data, size, contentType);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{itemRequestId}")
+                .buildAndExpand(request.getId()).toUri();
+
+        return ResponseEntity.created(location)
+                .body(new OutsourceResponse(true, "Item Request Created Successfully"));
     }
 }

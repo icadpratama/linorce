@@ -19,6 +19,13 @@ public class ItemReqRequest {
 
     private String documents;
 
+    public ItemReqRequest(@NotBlank(message = "item can't be blank") @Size(min = 3, max = 50, message = "name min length is 3 and max length is 50") String name, Integer quantity, @NotBlank(message = "details can't be blank") @Size(min = 10, max = 250, message = "details min lenght is 10 and max length is 250") String details, String documents) {
+        this.name = name;
+        this.quantity = quantity;
+        this.details = details;
+        this.documents = documents;
+    }
+
     public String getName() {
         return name;
     }

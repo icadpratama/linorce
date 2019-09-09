@@ -1,5 +1,7 @@
 package com.lawencon.linov.outsource.service.impl;
 
+import com.lawencon.linov.outsource.model.approval.ItemRequest;
+import com.lawencon.linov.outsource.payload.request.ItemReqRequest;
 import com.lawencon.linov.outsource.repository.ItemRequestRepository;
 import com.lawencon.linov.outsource.service.ItemRequestService;
 import com.lawencon.linov.outsource.util.PageAndSort;
@@ -19,5 +21,17 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Override
     public Page getAllItemRequests(PageAndSort model) {
         return requestRepository.findAll(PagingAndSorting.paging(model));
+    }
+
+    @Override
+    public ItemRequest createItemRequest(ItemReqRequest request) {
+        ItemRequest item = new ItemRequest();
+
+        item.setName(request.getName());
+        item.setQuantity(request.getQuantity());
+        item.setDetails(request.getDetails());
+        item.setDocuments(request.getDocuments());
+
+        return requestRepository.save(item);
     }
 }
