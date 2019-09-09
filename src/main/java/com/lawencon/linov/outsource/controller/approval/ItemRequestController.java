@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -60,23 +59,32 @@ public class ItemRequestController {
     public ResponseEntity createPoll(
             @RequestParam(name = "name") String name,
             @RequestParam(name = "description") String description,
-                                     @RequestParam(value = "quantity") Integer quantity,
-                                     @RequestParam(name = "file") MultipartFile file) throws IOException {
+            @RequestParam(value = "quantity") Integer quantity,
+            @RequestParam(name = "file") MultipartFile file,
+            @CurrentUser UserPrincipal currentUser) {
 
-        String contentType = file.getContentType();
-        InputStream data = file.getInputStream();
-        String objectName = file.getOriginalFilename();
-        Long size = file.getSize();
+        URI location = null;
 
-        ItemReqRequest itemRequest = new ItemReqRequest(name, quantity, description, objectName);
+        try {
+            String contentType = file.getContentType();
+            InputStream data = file.getInputStream();
+            String objectName = currentUser.getUsername() + "/" + file.getOriginalFilename();
+            Long size = file.getSize();
 
-        ItemRequest request = requestService.createItemRequest(itemRequest);
+            ItemReqRequest itemRequest = new ItemReqRequest(name, quantity, description, objectName);
 
-        CommonUtil.fileUpload("item-request", objectName, data, size, contentType);
+            ItemRequest request = requestService.createItemRequest(itemRequest);
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{itemRequestId}")
-                .buildAndExpand(request.getId()).toUri();
+            CommonUtil.fileUpload("item-request",  objectName, data, size, contentType);
+
+            location = ServletUriComponentsBuilder
+                    .fromCurrentRequest().path("/{itemRequestId}")
+                    .buildAndExpand(request.getId()).toUri();
+
+
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
 
         return ResponseEntity.created(location)
                 .body(new OutsourceResponse(true, "Item Request Created Successfully"));
