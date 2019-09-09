@@ -2,6 +2,7 @@ package com.lawencon.linov.outsource.controller.approval;
 
 import com.lawencon.linov.outsource.model.approval.ItemRequest;
 import com.lawencon.linov.outsource.payload.request.ItemReqRequest;
+import com.lawencon.linov.outsource.payload.response.ItemRequestResponse;
 import com.lawencon.linov.outsource.payload.response.OutsourceResponse;
 import com.lawencon.linov.outsource.security.CurrentUser;
 import com.lawencon.linov.outsource.security.UserPrincipal;
@@ -55,7 +56,7 @@ public class ItemRequestController {
     }
 
     @PostMapping
-//    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_HR')")
     public ResponseEntity createPoll(
             @RequestParam(name = "name") String name,
             @RequestParam(name = "description") String description,
@@ -79,5 +80,11 @@ public class ItemRequestController {
 
         return ResponseEntity.created(location)
                 .body(new OutsourceResponse(true, "Item Request Created Successfully"));
+    }
+
+    @GetMapping("/{itemRequestId}")
+    public ResponseEntity getItemRequestById(@CurrentUser UserPrincipal currentUser, @PathVariable Long id){
+        ItemRequestResponse result = requestService.getItemRequestById(id, currentUser);
+        return ResponseEntity.ok(result);
     }
 }
