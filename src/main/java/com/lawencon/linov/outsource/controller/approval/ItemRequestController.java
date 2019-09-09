@@ -44,6 +44,6 @@ public class ItemRequestController {
         model.setColumn(column);
 
         Page result = requestService.getAllItemRequests(model);
-        return null;
+        return ResponseEntity.ok(result);
     }
 }
