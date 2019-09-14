@@ -27,8 +27,7 @@ public class UserController {
     @GetMapping("/me")
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_HR')")
     public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
-        UserSummary userSummary = new UserSummary(currentUser.getId(), currentUser.getUsername(), currentUser.getFirstName(), currentUser.getLastName());
-        return userSummary;
+        return new UserSummary(currentUser.getId(), currentUser.getUsername(), currentUser.getFirstName(), currentUser.getLastName());
     }
 
     @GetMapping("/checkUsernameAvailability")
@@ -42,6 +41,9 @@ public class UserController {
         Boolean isAvailable = userService.checkUserByEmail(email);
         return new UserIdentityAvailability(isAvailable);
     }
+
+//    @PutMapping
+//    public
 
     @GetMapping("/{username}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
