@@ -74,11 +74,15 @@ public class CommonUtil {
     }
 
     public static String getFileExtension(MultipartFile file) {
-        String fileName = Objects.requireNonNull(file.getOriginalFilename()).replaceAll("(^ )|( $)", "");
+        String fileName = Objects.requireNonNull(trimSpace(Objects.requireNonNull(file.getOriginalFilename())));
         if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) {
             return fileName.substring(fileName.lastIndexOf(".")+1);
         } else {
             return "";
         }
+    }
+
+    public static String trimSpace(String s){
+        return s.replaceAll("(^ )|( $)", "");
     }
 }

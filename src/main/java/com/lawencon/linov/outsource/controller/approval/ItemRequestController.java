@@ -1,11 +1,13 @@
 package com.lawencon.linov.outsource.controller.approval;
 
+import com.lawencon.linov.outsource.model.Image;
 import com.lawencon.linov.outsource.model.approval.ItemRequest;
 import com.lawencon.linov.outsource.payload.request.ItemReqRequest;
 import com.lawencon.linov.outsource.payload.response.ItemRequestResponse;
 import com.lawencon.linov.outsource.payload.response.OutsourceResponse;
 import com.lawencon.linov.outsource.security.CurrentUser;
 import com.lawencon.linov.outsource.security.UserPrincipal;
+import com.lawencon.linov.outsource.service.ImageService;
 import com.lawencon.linov.outsource.service.ItemRequestService;
 import com.lawencon.linov.outsource.service.UserService;
 import com.lawencon.linov.outsource.util.CommonUtil;
@@ -19,9 +21,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/approval/item_request")
@@ -29,12 +33,14 @@ public class ItemRequestController {
 
     private final ItemRequestService requestService;
     private final UserService userService;
+    private final ImageService imageService;
 
     private static final Logger logger = LoggerFactory.getLogger(ItemRequestController.class);
 
-    public ItemRequestController(ItemRequestService requestService, UserService userService) {
+    public ItemRequestController(ItemRequestService requestService, UserService userService, ImageService imageService) {
         this.requestService = requestService;
         this.userService = userService;
+        this.imageService = imageService;
     }
 
     @GetMapping
@@ -63,19 +69,22 @@ public class ItemRequestController {
             @RequestParam(name = "file") MultipartFile file,
             @CurrentUser UserPrincipal currentUser) {
 
+        @NotNull
         URI location = null;
 
         try {
             String contentType = file.getContentType();
             InputStream data = file.getInputStream();
-            String objectName = currentUser.getUsername() + "/" + file.getOriginalFilename();
+            String objectName = currentUser.getUsername() + "/" + CommonUtil.trimSpace(Objects.requireNonNull(file.getOriginalFilename()));
             Long size = file.getSize();
+            String bucketName = "item-request";
 
             ItemReqRequest itemRequest = new ItemReqRequest(name, quantity, description, objectName);
 
             ItemRequest request = requestService.createItemRequest(itemRequest);
 
-            CommonUtil.fileUpload("item-request",  objectName, data, size, contentType);
+            CommonUtil.fileUpload(bucketName,  objectName, data, size, contentType);
+            imageService.uploadImage(new Image(objectName, bucketName, size, contentType));
 
             location = ServletUriComponentsBuilder
                     .fromCurrentRequest().path("/{itemRequestId}")
@@ -84,6 +93,7 @@ public class ItemRequestController {
             logger.error(e.getMessage());
         }
 
+        assert location != null;
         return ResponseEntity.created(location)
                 .body(new OutsourceResponse(true, "Item Request Created Successfully"));
     }
