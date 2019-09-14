@@ -12,6 +12,8 @@ import com.lawencon.linov.outsource.service.ImageService;
 import com.lawencon.linov.outsource.service.ItemRequestService;
 import com.lawencon.linov.outsource.service.UserService;
 import com.lawencon.linov.outsource.util.CommonUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +29,7 @@ public class UserController {
     private final UserService userService;
     private final ItemRequestService requestService;
     private final ImageService imageService;
+    private static Logger logger = LoggerFactory.getLogger(UserController.class);
 
     public UserController(UserService userService, ItemRequestService requestService, ImageService imageService) {
         this.userService = userService;
@@ -58,15 +61,23 @@ public class UserController {
             @RequestParam(name = "file") MultipartFile file,
             @CurrentUser UserPrincipal currentUser) throws IOException {
 
-        String objectName = "avatar." + CommonUtil.getFileExtension(file);
-        String bucketName = currentUser.getUsername() + "/" + "avatar";
+        String objectName = currentUser.getUsername() + "/" + "avatar." + CommonUtil.getFileExtension(file);
+        String bucketName = "avatar";
         String contentType = file.getContentType();
 
         Long size = file.getSize();
         InputStream data = file.getInputStream();
 
         CommonUtil.fileUpload(bucketName, objectName, data, size, contentType);
-        Image image = imageService.uploadImage(new Image(objectName, bucketName, size, contentType));
+
+        Image image = new Image(objectName, bucketName, size, contentType);
+
+        try {
+            imageService.uploadImage(image);
+        } catch (Exception e) {
+            logger.error(String.valueOf(e.getCause()));
+        }
+
         return ResponseEntity.ok(image);
     }
 

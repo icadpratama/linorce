@@ -57,3 +57,6 @@ CREATE TABLE images(
     updated_by INT8 DEFAULT NULL,
     PRIMARY KEY (id)
 );
+
+ALTER TABLE images
+ADD CONSTRAINT image_uq UNIQUE (object_name, bucket_name);
