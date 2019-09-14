@@ -19,6 +19,11 @@ public class Absence extends UserDateAudit {
     @Column(name = "project_name")
     private String projectName;
 
+    public Absence(String location, String projectName) {
+        this.location = location;
+        this.projectName = projectName;
+    }
+
     public Long getId() {
         return id;
     }

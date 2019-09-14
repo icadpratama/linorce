@@ -39,9 +39,7 @@ public class AbsenceController {
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity checkIn(@Valid @RequestBody AbsenceRequest absenceRequest,
             @CurrentUser UserPrincipal currentUser) {
-        Absence absence = new Absence();
-        absence.setLocation(absenceRequest.getLocation());
-        absence.setProjectName(absenceRequest.getProjectName());
+        Absence absence = new Absence(absenceRequest.getLocation(), absenceRequest.getProjectName());
         Absence result = absenceService.checkIn(absence);
         return ResponseEntity.ok(result);
     }
@@ -50,9 +48,7 @@ public class AbsenceController {
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity checkOut(@Valid @RequestBody AbsenceRequest absenceRequest,
                                   @CurrentUser UserPrincipal currentUser) {
-        Absence absence = new Absence();
-        absence.setLocation(absenceRequest.getLocation());
-        absence.setProjectName(absenceRequest.getProjectName());
+        Absence absence = new Absence(absenceRequest.getLocation(), absenceRequest.getProjectName());
         Absence result = absenceService.checkIn(absence);
         return ResponseEntity.ok(result);
     }
