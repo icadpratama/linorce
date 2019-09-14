@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "absences")
-public class absence extends UserDateAudit {
+public class Absence extends UserDateAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
