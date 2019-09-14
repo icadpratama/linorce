@@ -60,14 +60,17 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        if(userService.checkUserByUsername(signUpRequest.getUsername())) {
-            return new ResponseEntity(new OutsourceResponse(false, "Username is already taken!"),
-                    HttpStatus.BAD_REQUEST);
+        String message = "";
+        if (userService.checkUserByUsername(signUpRequest.getUsername())) {
+            message = "Username is already taken!";
         }
 
-        if(userService.checkUserByEmail(signUpRequest.getEmail())) {
-            return new ResponseEntity(new OutsourceResponse(false, "Email Address already in use!"),
-                    HttpStatus.BAD_REQUEST);
+        if (userService.checkUserByEmail(signUpRequest.getEmail())) {
+            message = "Email Address already in use!";
+        }
+
+        if (message.length() > 0) {
+            return new ResponseEntity<>(new OutsourceResponse(false, message), HttpStatus.BAD_REQUEST);
         }
 
         // Creating user's account
