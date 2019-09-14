@@ -58,9 +58,7 @@ public class UserController {
             @RequestParam(name = "file") MultipartFile file,
             @CurrentUser UserPrincipal currentUser) throws IOException {
 
-        String fileName = "avatar." + CommonUtil.getFileExtension(file);
-        System.out.println(fileName);
-        String objectName = fileName;
+        String objectName = "avatar." + CommonUtil.getFileExtension(file);
         String bucketName = currentUser.getUsername() + "/" + "avatar";
         String contentType = file.getContentType();
 
