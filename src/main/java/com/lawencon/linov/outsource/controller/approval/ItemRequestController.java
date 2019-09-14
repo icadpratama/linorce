@@ -80,8 +80,6 @@ public class ItemRequestController {
             location = ServletUriComponentsBuilder
                     .fromCurrentRequest().path("/{itemRequestId}")
                     .buildAndExpand(request.getId()).toUri();
-
-
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

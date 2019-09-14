@@ -13,4 +13,5 @@ public interface ItemRequestService {
     Page getAllItemRequests(PageAndSort model);
     ItemRequest createItemRequest(ItemReqRequest request);
     ItemRequestResponse getItemRequestById(Long id, UserPrincipal currentUser);
+    Long sumOfRequest(Long id);
 }

@@ -5,7 +5,7 @@ import com.lawencon.linov.outsource.model.audit.UserDateAudit;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tables")
+@Table(name = "images")
 public class Image extends UserDateAudit {
 
     @Id
@@ -23,6 +23,13 @@ public class Image extends UserDateAudit {
 
     @Column(name = "content_type")
     private String contentType;
+
+    public Image(String objectName, String bucketName, Long size, String contentType) {
+        this.objectName = objectName;
+        this.bucketName = bucketName;
+        this.size = size;
+        this.contentType = contentType;
+    }
 
     public Long getId() {
         return id;

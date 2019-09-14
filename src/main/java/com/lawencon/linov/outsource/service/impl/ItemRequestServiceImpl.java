@@ -66,4 +66,9 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
         return response;
     }
+
+    @Override
+    public Long sumOfRequest(Long id) {
+        return requestRepository.countByCreatedBy(id);
+    }
 }

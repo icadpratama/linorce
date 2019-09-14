@@ -1,27 +1,37 @@
 package com.lawencon.linov.outsource.controller.authentication;
 
 import com.lawencon.linov.outsource.exception.ResourceNotFoundException;
+import com.lawencon.linov.outsource.model.Image;
 import com.lawencon.linov.outsource.model.authentication.User;
 import com.lawencon.linov.outsource.payload.response.UserIdentityAvailability;
 import com.lawencon.linov.outsource.payload.response.UserProfile;
 import com.lawencon.linov.outsource.payload.response.UserSummary;
-import com.lawencon.linov.outsource.repository.ItemRequestRepository;
 import com.lawencon.linov.outsource.security.CurrentUser;
 import com.lawencon.linov.outsource.security.UserPrincipal;
+import com.lawencon.linov.outsource.service.ImageService;
+import com.lawencon.linov.outsource.service.ItemRequestService;
 import com.lawencon.linov.outsource.service.UserService;
+import com.lawencon.linov.outsource.util.CommonUtil;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
-    private final ItemRequestRepository requestRepository;
+    private final ItemRequestService requestService;
+    private final ImageService imageService;
 
-    public UserController(UserService userService, ItemRequestRepository requestRepository) {
+    public UserController(UserService userService, ItemRequestService requestService, ImageService imageService) {
         this.userService = userService;
-        this.requestRepository = requestRepository;
+        this.requestService = requestService;
+        this.imageService = imageService;
     }
 
     @GetMapping("/me")
@@ -42,8 +52,25 @@ public class UserController {
         return new UserIdentityAvailability(isAvailable);
     }
 
-//    @PutMapping
-//    public
+    @PostMapping("/profile")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_HR')")
+    public ResponseEntity updateProfilePicture(
+            @RequestParam(name = "file") MultipartFile file,
+            @CurrentUser UserPrincipal currentUser) throws IOException {
+
+        String fileName = "avatar." + CommonUtil.getFileExtension(file);
+        System.out.println(fileName);
+        String objectName = fileName;
+        String bucketName = currentUser.getUsername() + "/" + "avatar";
+        String contentType = file.getContentType();
+
+        Long size = file.getSize();
+        InputStream data = file.getInputStream();
+
+        CommonUtil.fileUpload(bucketName, objectName, data, size, contentType);
+        Image image = imageService.uploadImage(new Image(objectName, bucketName, size, contentType));
+        return ResponseEntity.ok(image);
+    }
 
     @GetMapping("/{username}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -51,7 +78,7 @@ public class UserController {
         User user = userService.userListByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
 
-        long requestCount = requestRepository.countByCreatedBy(user.getId());
+        long requestCount = requestService.sumOfRequest(user.getId());
 
         return new UserProfile(user.getId(), user.getUsername(), user.getFirstName(), user.getLastName(), user.getCreatedAt(), requestCount);
     }

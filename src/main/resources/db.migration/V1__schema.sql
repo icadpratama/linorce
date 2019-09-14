@@ -44,3 +44,16 @@ CREATE TABLE item_requests(
 -- INSERT INTO roles(id, name) values (1, 'ROLE_ADMIN');
 -- INSERT INTO roles(id, name) values (2, 'ROLE_USER');
 -- INSERT INTO roles(id, name) values (3, 'ROLE_HR');
+
+CREATE TABLE images(
+    id SERIAL8 NOT NULL,
+    object_name VARCHAR(50),
+    bucket_name VARCHAR(50),
+    size INT8,
+    content_type VARCHAR(50),
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    created_by INT8 DEFAULT NULL,
+    updated_by INT8 DEFAULT NULL,
+    PRIMARY KEY (id)
+);

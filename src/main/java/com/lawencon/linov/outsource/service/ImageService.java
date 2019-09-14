@@ -4,5 +4,5 @@ import com.lawencon.linov.outsource.model.Image;
 
 public interface ImageService {
 
-    void uploadImage(Image image);
+    Image uploadImage(Image image);
 }

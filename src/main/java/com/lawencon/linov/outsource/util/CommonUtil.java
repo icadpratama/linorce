@@ -1,10 +1,12 @@
 package com.lawencon.linov.outsource.util;
 
+
 import io.minio.MinioClient;
 import io.minio.errors.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.multipart.MultipartFile;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class CommonUtil {
 
@@ -68,5 +71,14 @@ public class CommonUtil {
 
     public static void downloadFile(){
 
+    }
+
+    public static String getFileExtension(MultipartFile file) {
+        String fileName = Objects.requireNonNull(file.getOriginalFilename()).replaceAll("(^ )|( $)", "");
+        if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) {
+            return fileName.substring(fileName.lastIndexOf(".")+1);
+        } else {
+            return "";
+        }
     }
 }
