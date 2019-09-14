@@ -24,11 +24,13 @@ public class AbsenceController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_HR', 'ROLE_ADMIN')")
     public ResponseEntity historyCheckInByUser(@RequestParam("id") Long id){
         return null;
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_HR', 'ROLE_ADMIN')")
     public ResponseEntity allHistoryCheckIn(){
         return null;
     }
