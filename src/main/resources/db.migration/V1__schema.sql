@@ -33,13 +33,18 @@ CREATE TABLE item_requests(
     name VARCHAR(50),
     quantity INT,
     details VARCHAR(250),
-    documents VARCHAR(250),
+    image_id INT8,
     created_at timestamp DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
     created_by INT8 DEFAULT NULL,
     updated_by INT8 DEFAULT NULL,
     PRIMARY KEY (id)
 );
+
+ALTER TABLE item_requests
+ADD CONSTRAINT ir_image_fk
+    FOREIGN KEY (image_id)
+    REFERENCES images(id);
 
 -- INSERT INTO roles(id, name) values (1, 'ROLE_ADMIN');
 -- INSERT INTO roles(id, name) values (2, 'ROLE_USER');

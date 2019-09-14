@@ -9,7 +9,6 @@ import com.lawencon.linov.outsource.security.CurrentUser;
 import com.lawencon.linov.outsource.security.UserPrincipal;
 import com.lawencon.linov.outsource.service.ImageService;
 import com.lawencon.linov.outsource.service.ItemRequestService;
-import com.lawencon.linov.outsource.service.UserService;
 import com.lawencon.linov.outsource.util.CommonUtil;
 import com.lawencon.linov.outsource.util.PageAndSort;
 import org.slf4j.Logger;
@@ -32,14 +31,12 @@ import java.util.Objects;
 public class ItemRequestController {
 
     private final ItemRequestService requestService;
-    private final UserService userService;
     private final ImageService imageService;
 
     private static final Logger logger = LoggerFactory.getLogger(ItemRequestController.class);
 
-    public ItemRequestController(ItemRequestService requestService, UserService userService, ImageService imageService) {
+    public ItemRequestController(ItemRequestService requestService, ImageService imageService) {
         this.requestService = requestService;
-        this.userService = userService;
         this.imageService = imageService;
     }
 
@@ -62,7 +59,7 @@ public class ItemRequestController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_HR')")
-    public ResponseEntity createPoll(
+    public ResponseEntity createItemRequest(
             @RequestParam(name = "name") String name,
             @RequestParam(name = "description") String description,
             @RequestParam(value = "quantity") Integer quantity,
@@ -79,12 +76,10 @@ public class ItemRequestController {
             Long size = file.getSize();
             String bucketName = "item-request";
 
-            ItemReqRequest itemRequest = new ItemReqRequest(name, quantity, description, objectName);
-
-            ItemRequest request = requestService.createItemRequest(itemRequest);
-
             CommonUtil.fileUpload(bucketName,  objectName, data, size, contentType);
-            imageService.uploadImage(new Image(objectName, bucketName, size, contentType));
+            Image image = imageService.uploadImage(new Image(objectName, bucketName, size, contentType));
+            ItemReqRequest itemRequest = new ItemReqRequest(name, quantity, description, image);
+            ItemRequest request = requestService.createItemRequest(itemRequest);
 
             location = ServletUriComponentsBuilder
                     .fromCurrentRequest().path("/{itemRequestId}")

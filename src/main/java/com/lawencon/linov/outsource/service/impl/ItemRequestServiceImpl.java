@@ -38,7 +38,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         item.setName(request.getName());
         item.setQuantity(request.getQuantity());
         item.setDetails(request.getDetails());
-        item.setDocuments(request.getDocuments());
+        item.setImage(request.getImage());
 
         return requestRepository.save(item);
     }
@@ -60,7 +60,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         response.setQuantity(request.getQuantity());
         response.setName(request.getName());
         response.setDetails(request.getDetails());
-        response.setDocument(request.getDocuments());
         response.setCreatedBy(summary);
         response.setCreationDateTime(request.getCreatedAt());
 

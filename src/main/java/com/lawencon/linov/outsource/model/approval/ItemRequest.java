@@ -1,5 +1,6 @@
 package com.lawencon.linov.outsource.model.approval;
 
+import com.lawencon.linov.outsource.model.Image;
 import com.lawencon.linov.outsource.model.audit.UserDateAudit;
 
 import javax.persistence.*;
@@ -24,12 +25,13 @@ public class ItemRequest extends UserDateAudit {
     private Integer quantity;
 
     @NotBlank(message = "details can't be blank")
-    @Size(min = 10, max = 250, message = "details min lenght is 10 and max length is 250")
+    @Size(min = 10, max = 250, message = "details min length is 10 and max length is 250")
     @Column(name = "details")
     private String details;
 
-    @Column(name = "documents")
-    private String documents;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
+    private Image image;
 
     public Long getId() {
         return id;
@@ -63,11 +65,11 @@ public class ItemRequest extends UserDateAudit {
         this.details = details;
     }
 
-    public String getDocuments() {
-        return documents;
+    public Image getImage() {
+        return image;
     }
 
-    public void setDocuments(String documents) {
-        this.documents = documents;
+    public void setImage(Image image) {
+        this.image = image;
     }
 }

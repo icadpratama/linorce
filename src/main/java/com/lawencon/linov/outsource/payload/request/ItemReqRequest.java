@@ -1,5 +1,7 @@
 package com.lawencon.linov.outsource.payload.request;
 
+import com.lawencon.linov.outsource.model.Image;
+
 import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -17,13 +19,21 @@ public class ItemReqRequest {
     @Size(min = 10, max = 250, message = "details min lenght is 10 and max length is 250")
     private String details;
 
-    private String documents;
+    private Image image;
 
-    public ItemReqRequest(@NotBlank(message = "item can't be blank") @Size(min = 3, max = 50, message = "name min length is 3 and max length is 50") String name, Integer quantity, @NotBlank(message = "details can't be blank") @Size(min = 10, max = 250, message = "details min lenght is 10 and max length is 250") String details, String documents) {
+    public ItemReqRequest(@NotBlank(message = "item can't be blank") @Size(min = 3, max = 50, message = "name min length is 3 and max length is 50") String name, Integer quantity, @NotBlank(message = "details can't be blank") @Size(min = 10, max = 250, message = "details min lenght is 10 and max length is 250") String details, Image image) {
         this.name = name;
         this.quantity = quantity;
         this.details = details;
-        this.documents = documents;
+        this.image = image;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 
     public String getName() {
@@ -48,13 +58,5 @@ public class ItemReqRequest {
 
     public void setDetails(String details) {
         this.details = details;
-    }
-
-    public String getDocuments() {
-        return documents;
-    }
-
-    public void setDocuments(String documents) {
-        this.documents = documents;
     }
 }

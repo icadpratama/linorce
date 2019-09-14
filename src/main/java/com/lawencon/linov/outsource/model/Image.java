@@ -1,5 +1,7 @@
 package com.lawencon.linov.outsource.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.lawencon.linov.outsource.model.approval.ItemRequest;
 import com.lawencon.linov.outsource.model.audit.UserDateAudit;
 
 import javax.persistence.*;
@@ -23,6 +25,13 @@ public class Image extends UserDateAudit {
 
     @Column(name = "content_type")
     private String contentType;
+
+    @OneToOne(mappedBy = "image")
+    @JsonIgnore
+    private ItemRequest itemRequest;
+
+    public Image() {
+    }
 
     public Image(String objectName, String bucketName, Long size, String contentType) {
         this.objectName = objectName;
@@ -69,5 +78,13 @@ public class Image extends UserDateAudit {
 
     public void setContentType(String contentType) {
         this.contentType = contentType;
+    }
+
+    public ItemRequest getItemRequest() {
+        return itemRequest;
+    }
+
+    public void setItemRequest(ItemRequest itemRequest) {
+        this.itemRequest = itemRequest;
     }
 }
