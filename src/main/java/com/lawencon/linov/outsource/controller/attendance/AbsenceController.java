@@ -45,4 +45,15 @@ public class AbsenceController {
         Absence result = absenceService.checkIn(absence);
         return ResponseEntity.ok(result);
     }
+
+    @PostMapping("/checkout")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity checkOut(@Valid @RequestBody AbsenceRequest absenceRequest,
+                                  @CurrentUser UserPrincipal currentUser) {
+        Absence absence = new Absence();
+        absence.setLocation(absenceRequest.getLocation());
+        absence.setProjectName(absenceRequest.getProjectName());
+        Absence result = absenceService.checkIn(absence);
+        return ResponseEntity.ok(result);
+    }
 }
