@@ -46,6 +46,17 @@ public class OutsourceApplication {
     }
 
     @Bean
+    public Docket attendance() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.lawencon.linov.outsource.controller.attendance"))
+                .paths(PathSelectors.any())
+                .build()
+                .groupName("Attendance")
+                .apiInfo(apiInfo());
+    }
+
+    @Bean
     public Docket authentication() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
