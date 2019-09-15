@@ -41,6 +41,7 @@ public class ItemRequestController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_HR', 'ROLE_ADMIN')")
     public ResponseEntity getItemRequest(@CurrentUser UserPrincipal currentUser,
                                          @RequestParam(value = "page", defaultValue = "0") Integer page,
                                          @RequestParam(value = "size", defaultValue = "5") Integer size,
