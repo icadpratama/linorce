@@ -16,7 +16,7 @@ public class ItemReqRequest {
     private Integer quantity;
 
     @NotBlank(message = "details can't be blank")
-    @Size(min = 10, max = 250, message = "details min lenght is 10 and max length is 250")
+    @Size(min = 10, max = 250, message = "details min length is 10 and max length is 250")
     private String details;
 
     private Image image;

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,17 +44,7 @@ public class ItemRequestController {
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_HR', 'ROLE_ADMIN')")
     public ResponseEntity getItemRequest(@CurrentUser UserPrincipal currentUser,
-                                         @RequestParam(value = "page", defaultValue = "0") Integer page,
-                                         @RequestParam(value = "size", defaultValue = "5") Integer size,
-                                         @RequestParam(value = "direction", defaultValue = "ASC") String direction,
-                                         @RequestParam(value = "field", defaultValue = "name") String column){
-
-        PageAndSort model = new PageAndSort();
-        model.setPage(page);
-        model.setSize(size);
-        model.setDirection(direction);
-        model.setColumn(column);
-
+                                         @Valid PageAndSort model){
         Page result = requestService.getAllItemRequests(model);
         return ResponseEntity.ok(result);
     }

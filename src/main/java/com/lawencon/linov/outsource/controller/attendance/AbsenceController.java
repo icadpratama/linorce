@@ -37,9 +37,6 @@ public class AbsenceController {
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_HR','ROLE_ADMIN')")
     public ResponseEntity allHistoryCheckIn(@Valid PageAndSort model){
-        if (CommonUtil.isEmpty(model.getColumn())) {
-            model.setColumn("location");
-        }
         Page result = absenceService.getAllAbsences(model);
         return ResponseEntity.ok(result);
     }
