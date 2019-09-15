@@ -6,6 +6,7 @@ import com.lawencon.linov.outsource.security.CurrentUser;
 import com.lawencon.linov.outsource.security.UserPrincipal;
 import com.lawencon.linov.outsource.service.AbsenceService;
 import com.lawencon.linov.outsource.util.AbsenceType;
+import com.lawencon.linov.outsource.util.CommonUtil;
 import com.lawencon.linov.outsource.util.PageAndSort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,16 +36,10 @@ public class AbsenceController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_HR','ROLE_ADMIN')")
-    public ResponseEntity allHistoryCheckIn(@RequestParam(value = "page", defaultValue = "0") Integer page,
-                                            @RequestParam(value = "size", defaultValue = "5") Integer size,
-                                            @RequestParam(value = "direction", defaultValue = "ASC") String direction,
-                                            @RequestParam(value = "field", defaultValue = "location") String column){
-        PageAndSort model = new PageAndSort();
-        model.setPage(page);
-        model.setSize(size);
-        model.setDirection(direction);
-        model.setColumn(column);
-
+    public ResponseEntity allHistoryCheckIn(@Valid PageAndSort model){
+        if (CommonUtil.isEmpty(model.getColumn())) {
+            model.setColumn("location");
+        }
         Page result = absenceService.getAllAbsences(model);
         return ResponseEntity.ok(result);
     }

@@ -2,7 +2,6 @@ package com.lawencon.linov.outsource.model.attendance;
 
 import com.lawencon.linov.outsource.model.audit.UserDateAudit;
 import com.lawencon.linov.outsource.util.AbsenceType;
-import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 
