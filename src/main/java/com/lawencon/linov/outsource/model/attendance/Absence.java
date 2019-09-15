@@ -1,6 +1,8 @@
 package com.lawencon.linov.outsource.model.attendance;
 
 import com.lawencon.linov.outsource.model.audit.UserDateAudit;
+import com.lawencon.linov.outsource.util.AbsenceType;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 
@@ -19,9 +21,15 @@ public class Absence extends UserDateAudit {
     @Column(name = "project_name")
     private String projectName;
 
-    public Absence(String location, String projectName) {
+    @Enumerated(EnumType.STRING)
+    @NaturalId
+    @Column(length = 60)
+    private AbsenceType type;
+
+    public Absence(String location, String projectName, AbsenceType type) {
         this.location = location;
         this.projectName = projectName;
+        this.type = type;
     }
 
     public Long getId() {
@@ -46,5 +54,13 @@ public class Absence extends UserDateAudit {
 
     public void setProjectName(String projectName) {
         this.projectName = projectName;
+    }
+
+    public AbsenceType getType() {
+        return type;
+    }
+
+    public void setType(AbsenceType type) {
+        this.type = type;
     }
 }

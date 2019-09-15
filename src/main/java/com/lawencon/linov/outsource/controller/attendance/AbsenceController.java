@@ -5,6 +5,7 @@ import com.lawencon.linov.outsource.payload.request.AbsenceRequest;
 import com.lawencon.linov.outsource.security.CurrentUser;
 import com.lawencon.linov.outsource.security.UserPrincipal;
 import com.lawencon.linov.outsource.service.AbsenceService;
+import com.lawencon.linov.outsource.util.AbsenceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class AbsenceController {
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity checkIn(@Valid @RequestBody AbsenceRequest absenceRequest,
             @CurrentUser UserPrincipal currentUser) {
-        Absence absence = new Absence(absenceRequest.getLocation(), absenceRequest.getProjectName());
+        Absence absence = new Absence(absenceRequest.getLocation(), absenceRequest.getProjectName(), AbsenceType.CHECK_IN);
         Absence result = absenceService.checkIn(absence);
         return ResponseEntity.ok(result);
     }
@@ -49,7 +50,7 @@ public class AbsenceController {
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity checkOut(@Valid @RequestBody AbsenceRequest absenceRequest,
                                   @CurrentUser UserPrincipal currentUser) {
-        Absence absence = new Absence(absenceRequest.getLocation(), absenceRequest.getProjectName());
+        Absence absence = new Absence(absenceRequest.getLocation(), absenceRequest.getProjectName(), AbsenceType.CHECK_OUT);
         Absence result = absenceService.checkIn(absence);
         return ResponseEntity.ok(result);
     }
