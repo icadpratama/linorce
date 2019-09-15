@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@RestController("/absence")
+@RestController()
+@RequestMapping("/absence")
 public class AbsenceController {
 
     private final AbsenceService absenceService;
