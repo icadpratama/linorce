@@ -22,9 +22,11 @@ public class Absence extends UserDateAudit {
     private String projectName;
 
     @Enumerated(EnumType.STRING)
-    @NaturalId
     @Column(length = 60)
     private AbsenceType type;
+
+    public Absence() {
+    }
 
     public Absence(String location, String projectName, AbsenceType type) {
         this.location = location;
