@@ -65,3 +65,20 @@ CREATE TABLE images(
 
 ALTER TABLE images
 ADD CONSTRAINT image_uq UNIQUE (object_name, bucket_name);
+
+CREATE TABLE absences(
+    id SERIAL8 NOT NULL,
+    location VARCHAR(255),
+    project_name VARCHAR(150),
+    start TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ends TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    activity VARCHAR(255),
+    month INT,
+    year INT,
+    absence_type VARCHAR(60),
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    created_by INT8 DEFAULT NULL,
+    updated_by INT8 DEFAULT NULL,
+    PRIMARY KEY (id)
+);
