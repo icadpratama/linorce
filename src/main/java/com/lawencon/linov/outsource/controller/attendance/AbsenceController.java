@@ -9,11 +9,9 @@ import com.lawencon.linov.outsource.util.AbsenceType;
 import com.lawencon.linov.outsource.util.CommonUtil;
 import com.lawencon.linov.outsource.util.PageAndSort;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFTable;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,21 +79,20 @@ public class AbsenceController {
             CreationHelper createHelper = workbook.getCreationHelper();
             XSSFSheet sheet = workbook.createSheet("Absence");
 
-            CellStyle centerText = workbook.createCellStyle();
-            centerText.setAlignment(HorizontalAlignment.CENTER);
-            centerText.setVerticalAlignment(VerticalAlignment.CENTER);
+            CellStyle csCenter = workbook.createCellStyle();
+            centerText(csCenter);
+            styleTable(csCenter);
 
             // First Row Name and Job
             Font firstFont = workbook.createFont();
-            firstFont.setBold(true);
             firstFont.setColor(IndexedColors.WHITE.getIndex());
 
             CellStyle firstCellStyle = workbook.createCellStyle();
             firstCellStyle.setFont(firstFont);
             firstCellStyle.setFillBackgroundColor(IndexedColors.BLACK.getIndex());
             firstCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-            firstCellStyle.setAlignment(HorizontalAlignment.CENTER);
-            firstCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            centerText(firstCellStyle);
+            styleTable(firstCellStyle);
 
             Row firstRow = sheet.createRow((short)0);
             Cell cellName = firstRow.createCell((short)0);
@@ -104,7 +101,7 @@ public class AbsenceController {
             sheet.addMergedRegion(new CellRangeAddress(0,0,0,1));
             Cell cellNameValue = firstRow.createCell(2);
             cellNameValue.setCellValue(currentUser.getFirstName() + " "+ currentUser.getLastName());
-            cellNameValue.setCellStyle(centerText);
+            cellNameValue.setCellStyle(csCenter);
             sheet.addMergedRegion(new CellRangeAddress(0,0, 2, 3));
 
             Cell cellJob = firstRow.createCell((short) 4);
@@ -113,22 +110,21 @@ public class AbsenceController {
             sheet.addMergedRegion(new CellRangeAddress(0,0,4,6));
             Cell cellJobName = firstRow.createCell((short) 7);
             cellJobName.setCellValue("Full Stack Developer");
-            cellJobName.setCellStyle(centerText);
+            cellJobName.setCellStyle(csCenter);
 
             Cell lawencon = firstRow.createCell((short) 8);
             lawencon.setCellValue("PT LAWENCON INTERNASIONAL");
-            lawencon.setCellStyle(centerText);
+            lawencon.setCellStyle(csCenter);
             sheet.addMergedRegion(new CellRangeAddress(0,0,8,9));
 
             // Header
             Font headerFont = workbook.createFont();
-            headerFont.setBold(true);
             headerFont.setColor(IndexedColors.BLACK.getIndex());
 
             CellStyle headerCellStyle = workbook.createCellStyle();
             headerCellStyle.setFont(headerFont);
-            headerCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-            headerCellStyle.setAlignment(HorizontalAlignment.CENTER);
+            centerText(headerCellStyle);
+            styleTable(headerCellStyle);
 
             // Row for header
             Row headerRow = sheet.createRow(1);
@@ -140,6 +136,7 @@ public class AbsenceController {
                     cell = headerRow.createCell(col);
                     cell.setCellValue(columns[col].toUpperCase());
                     cell.setCellStyle(headerCellStyle);
+                    styleTable(headerCellStyle);
 
                     if (col == 8) {
                         sheet.addMergedRegion(new CellRangeAddress(1, 4, 8,9));
@@ -155,14 +152,17 @@ public class AbsenceController {
                     cell = secondRow.createCell(4);
                     cell.setCellValue("WORKING HOURS");
                     cell.setCellStyle(firstCellStyle);
+                    styleTable(firstCellStyle);
 
                     cell = secondRow.createCell(7);
                     cell.setCellValue("TOTAL");
                     cell.setCellStyle(firstCellStyle);
+                    styleTable(firstCellStyle);
 
                     cell = thirdRow.createCell(col);
                     cell.setCellValue(columns[col].toUpperCase());
                     cell.setCellStyle(headerCellStyle);
+                    styleTable(headerCellStyle);
                     sheet.addMergedRegion(new CellRangeAddress(3, 4, col,col));
                 }
             }
@@ -172,8 +172,15 @@ public class AbsenceController {
 
             CellStyle dateCellStyle = workbook.createCellStyle();
             dateCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd/mm/yyyy"));
-            dateCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-            dateCellStyle.setAlignment(HorizontalAlignment.CENTER);
+            centerText(dateCellStyle);
+
+            CellStyle timeCellStyle = workbook.createCellStyle();
+            timeCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("HH:mm"));
+            centerText(timeCellStyle);
+
+            CellStyle hourCellStyle = workbook.createCellStyle();
+            hourCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("HH"));
+            centerText(hourCellStyle);
 
             int rowIdx = 5;
             int no = 1;
@@ -184,20 +191,51 @@ public class AbsenceController {
 
                 Cell noCell = row.createCell(0);
                 noCell.setCellValue(no++);
-                noCell.setCellStyle(centerText);
+                noCell.setCellStyle(csCenter);
+                styleTable(csCenter);
 
                 Cell dateCell = row.createCell(1);
                 dateCell.setCellValue(Date.from(absence.getCreatedAt()));
                 dateCell.setCellStyle(dateCellStyle);
+                styleTable(dateCellStyle);
 
-                row.createCell(2).setCellValue(absence.getProjectName());
-                row.createCell(3).setCellValue(absence.getLocation());
-                row.createCell(4).setCellValue(absence.getStart());
-                row.createCell(5).setCellValue("");
-                row.createCell(6).setCellValue(absence.getEnd());
-                row.createCell(7).setCellValue("Total");
-                row.createCell(8).setCellValue(absence.getActivity());
+                Cell projectName = row.createCell(2);
+                projectName.setCellValue(absence.getProjectName());
+                projectName.setCellStyle(csCenter);
+                styleTable(csCenter);
+
+                Cell location = row.createCell(3);
+                location.setCellValue(absence.getLocation());
+                location.setCellStyle(csCenter);
+                styleTable(csCenter);
+
+                Cell start = row.createCell(4);
+                start.setCellValue(absence.getStart());
+                start.setCellStyle(timeCellStyle);
+                styleTable(timeCellStyle);
+
+                Cell strip = row.createCell(5);
+                strip.setCellValue("");
+                strip.setCellStyle(csCenter);
+                styleTable(csCenter);
+
+                Cell end = row.createCell(6);
+                end.setCellValue(absence.getEnd());
+                end.setCellStyle(timeCellStyle);
+                styleTable(timeCellStyle);
+
+                Cell total = row.createCell(7);
+                String ref = "G" +(rowIdx+1)+ "-E" + (rowIdx+1);
+                total.setCellFormula(ref);
+                total.setCellStyle(hourCellStyle);
+                styleTable(hourCellStyle);
+
+                Cell activity = row.createCell(8);
+                activity.setCellValue(absence.getActivity());
+                activity.setCellStyle(csCenter);
                 sheet.addMergedRegion(new CellRangeAddress(rowIdx, rowIdx, 8,9));
+                setBordersToMergedCells(sheet);
+
                 rowIdx++;
             }
 
@@ -212,18 +250,6 @@ public class AbsenceController {
             sheet.setColumnWidth(8, width(14));
             sheet.setColumnWidth(9, width(23));
 
-            int lRow = sheet.getLastRowNum();
-            int lCol = firstRow.getLastCellNum();
-
-            AreaReference reference = createHelper.createAreaReference(new CellReference(0,0), new CellReference(lRow,lCol));
-            XSSFTable table = sheet.createTable(reference);
-            table.setName("Test");
-            table.setDisplayName("Test_Table");
-
-            // For now, create the initial style in a low-level way
-            table.getCTTable().addNewTableStyleInfo();
-            table.getCTTable().getTableStyleInfo().setName("TableStyleMedium2");
-
             String fileName = "Timesheet_"+ CommonUtil.trimAllSpaces(currentUser.getFirstName()+" "+currentUser.getLastName()+"_"+CommonUtil.getMonth()+"_"+CommonUtil.currentYear(), "-");
 
             FileOutputStream fos = new FileOutputStream(new File(fileName+".xlsx"));
@@ -236,6 +262,30 @@ public class AbsenceController {
     }
 
     private static int width(int i){
-        return 250 * i;
+        return 256 * i;
+    }
+    private static void styleTable(CellStyle style){
+        style.setBorderRight(BorderStyle.THIN);
+        style.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        style.setBorderLeft(BorderStyle.THIN);
+        style.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        style.setBorderTop(BorderStyle.THIN);
+        style.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+    }
+    private static void centerText(CellStyle style){
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+    }
+
+    private static void setBordersToMergedCells(Sheet sheet) {
+        List<CellRangeAddress> mergedRegions = sheet.getMergedRegions();
+        for (CellRangeAddress rangeAddress : mergedRegions) {
+            RegionUtil.setBorderTop(BorderStyle.THIN, rangeAddress, sheet);
+            RegionUtil.setBorderLeft(BorderStyle.THIN, rangeAddress, sheet);
+            RegionUtil.setBorderRight(BorderStyle.THIN, rangeAddress, sheet);
+            RegionUtil.setBorderBottom(BorderStyle.THIN, rangeAddress, sheet);
+        }
     }
 }
