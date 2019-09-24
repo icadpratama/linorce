@@ -14,6 +14,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -146,5 +150,17 @@ public class CommonUtil {
                 break;
         }
         return monthName;
+    }
+
+    public static Instant resetTimeStart(){
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime midnight = now.with(LocalTime.MIDNIGHT);
+        return midnight.atZone(ZoneId.of("Asia/Jakarta")).toInstant();
+    }
+
+    public static Instant resetTimeEnd(){
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime noon = now.with(LocalTime.NOON);
+        return noon.atZone(ZoneId.of("Asia/Jakarta")).toInstant();
     }
 }

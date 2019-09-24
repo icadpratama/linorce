@@ -8,6 +8,7 @@ import com.lawencon.linov.outsource.util.PagingAndSorting;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,5 +39,10 @@ public class AbsenceServiceImpl implements AbsenceService {
     @Override
     public List<Absence> getAllAbsencePerMonth(Long id, Integer month, Integer year) {
         return absenceRepository.findAllByCreatedByAndMonthAndYear(id, month, year);
+    }
+
+    @Override
+    public Optional<Absence> getAbsenceByIdContaining(Long currentUser, Instant start, Instant end) {
+        return absenceRepository.findByCreatedByAndCreatedAtBetween(currentUser, start, end);
     }
 }

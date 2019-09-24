@@ -1,5 +1,6 @@
 package com.lawencon.linov.outsource.controller.attendance;
 
+import com.lawencon.linov.outsource.exception.ResourceNotFoundException;
 import com.lawencon.linov.outsource.model.attendance.Absence;
 import com.lawencon.linov.outsource.payload.request.AbsenceRequest;
 import com.lawencon.linov.outsource.security.CurrentUser;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -59,13 +62,16 @@ public class AbsenceController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/checkout")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity checkOut(@Valid @RequestBody AbsenceRequest absenceRequest,
-                                  @CurrentUser UserPrincipal currentUser) {
-        Absence absence = new Absence(absenceRequest.getLocation(), absenceRequest.getProjectName(), absenceRequest.getActivity(), CommonUtil.currentMonth(), CommonUtil.currentYear(), AbsenceType.CHECK_OUT);
-        Absence result = absenceService.checkIn(absence);
-        return ResponseEntity.ok(result);
+    @PutMapping("/checkout")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_HR')")
+    public ResponseEntity checkOut(@CurrentUser UserPrincipal currentUser) {
+        Absence absence = absenceService.getAbsenceByIdContaining(currentUser.getId(), CommonUtil.resetTimeStart(), CommonUtil.resetTimeEnd()).orElseThrow(
+                ()-> new ResourceNotFoundException("Absence","id",currentUser.getId()));
+        absence.setUpdatedAt(Instant.now());
+        absence.setEnd(new Timestamp(System.currentTimeMillis()));
+        absence.setType(AbsenceType.CHECK_OUT);
+        final Absence update = absenceService.checkIn(absence);
+        return ResponseEntity.ok(update);
     }
 
     @GetMapping("/download/excel")
