@@ -76,8 +76,7 @@ public class AbsenceController {
 
     @GetMapping("/download/excel")
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_HR')")
-    public ResponseEntity downloadReport(
-            @CurrentUser UserPrincipal currentUser){
+    public ResponseEntity generateExcelFile(@CurrentUser UserPrincipal currentUser){
         String[] columns = {"No", "Date", "Name of Project", "Location", "Start", "-" , "End", "Hour", "Activity/Remark"};
 
         try (XSSFWorkbook workbook = new XSSFWorkbook()){
