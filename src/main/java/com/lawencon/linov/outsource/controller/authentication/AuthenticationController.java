@@ -46,29 +46,16 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        User users = new User();
-        int jumlahAnotasi = users.getClass().getAnnotations().length;
-        System.out.println("Annotations: " + jumlahAnotasi);
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getUsernameOrEmail(),
+                        loginRequest.getPassword()
+                )
+        );
 
-        for (int i = 0; i < jumlahAnotasi; i++) {
-            System.out.println("Anotasi "+i+": " + users.getClass().getAnnotations()[i]);
-        }
-
-        for (int i = 0; i < users.getClass().getDeclaredFields().length; i++) {
-            System.out.println("Declared Fields: "+users.getClass().getDeclaredFields()[i]);
-        }
-
-//        Authentication authentication = authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(
-//                        loginRequest.getUsernameOrEmail(),
-//                        loginRequest.getPassword()
-//                )
-//        );
-//
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//        String jwt = tokenProvider.generateToken(authentication);
-//        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
-        return  null;
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = tokenProvider.generateToken(authentication);
+        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
     }
 
     @PostMapping("/register")

@@ -35,8 +35,9 @@ public class ItemRequest extends UserDateAudit {
     @JoinColumn(name = "image_id", referencedColumnName = "id")
     private Image image;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @Column(name = "approver")
     private User userId;
 
     @Enumerated(EnumType.STRING)

@@ -26,7 +26,7 @@ public class BusinessTrip extends UserDateAudit {
 
     private Image image;
 
-    @Column(name = "user_id")
+    @Column(name = "approver")
     private Long approver;
 
     @Column(name = "status")
