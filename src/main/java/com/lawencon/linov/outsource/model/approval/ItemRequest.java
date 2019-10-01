@@ -2,6 +2,8 @@ package com.lawencon.linov.outsource.model.approval;
 
 import com.lawencon.linov.outsource.model.Image;
 import com.lawencon.linov.outsource.model.audit.UserDateAudit;
+import com.lawencon.linov.outsource.model.authentication.User;
+import com.lawencon.linov.outsource.util.StatusName;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -32,6 +34,14 @@ public class ItemRequest extends UserDateAudit {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id", referencedColumnName = "id")
     private Image image;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User userId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 10)
+    private StatusName statusName;
 
     public Long getId() {
         return id;
@@ -71,5 +81,21 @@ public class ItemRequest extends UserDateAudit {
 
     public void setImage(Image image) {
         this.image = image;
+    }
+
+    public User getUserId() {
+        return userId;
+    }
+
+    public void setUserId(User userId) {
+        this.userId = userId;
+    }
+
+    public StatusName getStatusName() {
+        return statusName;
+    }
+
+    public void setStatusName(StatusName statusName) {
+        this.statusName = statusName;
     }
 }

@@ -70,4 +70,9 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     public Long sumOfRequest(Long id) {
         return requestRepository.countByCreatedBy(id);
     }
+
+    @Override
+    public void delete(Long id) {
+       requestRepository.deleteById(id);
+    }
 }

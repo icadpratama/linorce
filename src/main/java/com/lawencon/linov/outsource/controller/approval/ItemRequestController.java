@@ -41,6 +41,7 @@ public class ItemRequestController {
         this.imageService = imageService;
     }
 
+    // Get all item requests
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_HR', 'ROLE_ADMIN')")
     public ResponseEntity getItemRequest(@CurrentUser UserPrincipal currentUser,
@@ -49,6 +50,7 @@ public class ItemRequestController {
         return ResponseEntity.ok(result);
     }
 
+    // Create an item request
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_HR')")
     public ResponseEntity createItemRequest(
@@ -56,6 +58,7 @@ public class ItemRequestController {
             @RequestParam(name = "description") String description,
             @RequestParam(value = "quantity") Integer quantity,
             @RequestParam(name = "file") MultipartFile file,
+            @RequestParam(name = "user_id") Long userId,
             @CurrentUser UserPrincipal currentUser) {
 
         @NotNull
@@ -70,7 +73,7 @@ public class ItemRequestController {
 
             CommonUtil.fileUpload(bucketName,  objectName, data, size, contentType);
             Image image = imageService.uploadImage(new Image(objectName, bucketName, size, contentType));
-            ItemReqRequest itemRequest = new ItemReqRequest(name, quantity, description, image);
+            ItemReqRequest itemRequest = new ItemReqRequest(name, quantity, description, image, userId);
             ItemRequest request = requestService.createItemRequest(itemRequest);
 
             location = ServletUriComponentsBuilder
@@ -85,9 +88,23 @@ public class ItemRequestController {
                 .body(new OutsourceResponse(true, "Item Request Created Successfully"));
     }
 
+    // Get item request detail
     @GetMapping("/{itemRequestId}")
     public ResponseEntity getItemRequestById(@CurrentUser UserPrincipal currentUser, @PathVariable Long id){
         ItemRequestResponse result = requestService.getItemRequestById(id, currentUser);
         return ResponseEntity.ok(result);
+    }
+
+    // Update item request
+    @PutMapping
+    public ResponseEntity updateItemRequest(@CurrentUser UserPrincipal currentUser){
+        return null;
+    }
+
+    // Delete item request
+    @DeleteMapping
+    public ResponseEntity removeItemRequest(@PathVariable("id") Long id){
+        requestService.delete(id);
+        return null;
     }
 }

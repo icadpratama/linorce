@@ -14,4 +14,5 @@ public interface ItemRequestService {
     ItemRequest createItemRequest(ItemReqRequest request);
     ItemRequestResponse getItemRequestById(Long id, UserPrincipal currentUser);
     Long sumOfRequest(Long id);
+    void delete(Long id);
 }

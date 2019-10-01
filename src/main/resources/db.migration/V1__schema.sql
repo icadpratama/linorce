@@ -38,6 +38,8 @@ CREATE TABLE item_requests(
     updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
     created_by INT8 DEFAULT NULL,
     updated_by INT8 DEFAULT NULL,
+    user_id INT8,
+    status VARCHAR(10),
     PRIMARY KEY (id)
 );
 
@@ -45,6 +47,90 @@ ALTER TABLE item_requests
 ADD CONSTRAINT ir_image_fk
     FOREIGN KEY (image_id)
     REFERENCES images(id);
+
+ALTER TABLE item_requests
+ADD CONSTRAINT ir_user_fk
+    FOREIGN KEY (user_id)
+    REFERENCES users(id);
+
+CREATE TABLE support_homes(
+    id SERIAL8 NOT NULL,
+    start timestamp,
+    ends timestamp,
+    reason VARCHAR(250),
+    image_id INT8,
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    created_by INT8 DEFAULT NULL,
+    updated_by INT8 DEFAULT NULL,
+    user_id INT8,
+    status VARCHAR(10),
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE support_homes
+    ADD CONSTRAINT sh_image_fk
+    FOREIGN KEY (image_id)
+    REFERENCES images(id);
+
+ALTER TABLE support_homes
+    ADD CONSTRAINT sh_user_fk
+    FOREIGN KEY (user_id)
+    REFERENCES users(id);
+
+CREATE TABLE business_trips(
+    id SERIAL8 NOT NULL,
+    start timestamp,
+    ends timestamp,
+    reason VARCHAR(250),
+    image_id INT8,
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    created_by INT8 DEFAULT NULL,
+    updated_by INT8 DEFAULT NULL,
+    user_id INT8,
+    status VARCHAR(10),
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE business_trips
+    ADD CONSTRAINT bt_image_fk
+    FOREIGN KEY (image_id)
+    REFERENCES images(id);
+
+ALTER TABLE business_trips
+    ADD CONSTRAINT bt_user_fk
+    FOREIGN KEY (user_id)
+    REFERENCES users(id);
+
+CREATE TABLE leave_applications(
+    id SERIAL8 NOT NULL,
+    leave_type VARCHAR(250),
+    start timestamp,
+    ends timestamp,
+    start_day_type VARCHAR(14),
+    end_day_type VARCHAR(14),
+    reason VARCHAR(250),
+    image_id INT8,
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    created_by INT8 DEFAULT NULL,
+    updated_by INT8 DEFAULT NULL,
+    user_id INT8,
+    status VARCHAR(10),
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE leave_applications
+    ADD CONSTRAINT la_image_fk
+    FOREIGN KEY (image_id)
+    REFERENCES images(id);
+
+ALTER TABLE leave_applications
+    ADD CONSTRAINT la_user_fk
+    FOREIGN KEY (user_id)
+    REFERENCES users(id);
+
 
 -- INSERT INTO roles(id, name) values (1, 'ROLE_ADMIN');
 -- INSERT INTO roles(id, name) values (2, 'ROLE_USER');

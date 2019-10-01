@@ -1,6 +1,7 @@
 package com.lawencon.linov.outsource.repository;
 
 import com.lawencon.linov.outsource.model.authentication.User;
+import com.lawencon.linov.outsource.util.RoleName;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
@@ -13,4 +14,5 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long> {
     Optional<User> findByUsername(String username);
     Boolean existsByUsername(String username);
     Boolean existsByEmail(String email);
+    List<User> findAllByRoles(RoleName roleName);
 }
