@@ -1,9 +1,11 @@
 package com.lawencon.linov.outsource.model.claim;
 
+import com.lawencon.linov.outsource.model.audit.UserDateAudit;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "over_times")
-public class OverTime {
+public class OverTime extends UserDateAudit {
 }
