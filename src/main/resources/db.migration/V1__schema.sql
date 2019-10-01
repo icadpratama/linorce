@@ -119,6 +119,30 @@ ALTER TABLE business_trips
     FOREIGN KEY (approver)
     REFERENCES users(id);
 
+CREATE TABLE general_approvals(
+    id SERIAL8 NOT NULL,
+    subject VARCHAR(50),
+    details VARCHAR(50),
+    image_id INT8,
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    created_by INT8 DEFAULT NULL,
+    updated_by INT8 DEFAULT NULL,
+    approver INT8,
+    status VARCHAR(10),
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE general_approvals
+    ADD CONSTRAINT ga_image_fk
+    FOREIGN KEY (image_id)
+    REFERENCES images(id);
+
+ALTER TABLE general_approvals
+    ADD CONSTRAINT ga_user_fk
+    FOREIGN KEY (approver)
+    REFERENCES users(id);
+
 CREATE TABLE leave_applications(
     id SERIAL8 NOT NULL,
     leave_type VARCHAR(250),
