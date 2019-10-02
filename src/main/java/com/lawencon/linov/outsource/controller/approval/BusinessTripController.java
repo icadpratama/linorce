@@ -1,9 +1,7 @@
 package com.lawencon.linov.outsource.controller.approval;
 
-import com.lawencon.linov.outsource.exception.ResourceNotFoundException;
 import com.lawencon.linov.outsource.model.Image;
 import com.lawencon.linov.outsource.model.approval.BusinessTrip;
-import com.lawencon.linov.outsource.model.authentication.User;
 import com.lawencon.linov.outsource.payload.response.OutsourceResponse;
 import com.lawencon.linov.outsource.security.CurrentUser;
 import com.lawencon.linov.outsource.security.UserPrincipal;
@@ -69,11 +67,7 @@ public class BusinessTripController {
             CommonUtil.fileUpload(bucketName,  objectName, data, size, contentType);
             Image image = imageService.uploadImage(new Image(objectName, bucketName, size, contentType));
 
-            User approver = userService.userById(userId).orElseThrow(
-                    () -> new ResourceNotFoundException("User","id", userId)
-            );
-
-            BusinessTrip bt = new BusinessTrip(start, end, reason, image, approver, StatusName.PENDING);
+            BusinessTrip bt = new BusinessTrip(start, end, reason, image, userId, StatusName.PENDING);
             BusinessTrip request = businessTripService.requestBusinessTrip(bt);
 
             location = ServletUriComponentsBuilder

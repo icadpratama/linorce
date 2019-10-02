@@ -28,12 +28,12 @@ public class BusinessTrip extends UserDateAudit {
     private Image image;
 
     @Column(name = "approver")
-    private User approver;
+    private Long approver;
 
     @Column(name = "status")
     private StatusName status;
 
-    public BusinessTrip(Timestamp start, Timestamp end, String reason, Image image, User approver, StatusName status) {
+    public BusinessTrip(Timestamp start, Timestamp end, String reason, Image image, Long approver, StatusName status) {
         this.start = start;
         this.end = end;
         this.reason = reason;
@@ -82,11 +82,11 @@ public class BusinessTrip extends UserDateAudit {
         this.image = image;
     }
 
-    public User getApprover() {
+    public Long getApprover() {
         return approver;
     }
 
-    public void setApprover(User approver) {
+    public void setApprover(Long approver) {
         this.approver = approver;
     }
 
