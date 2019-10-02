@@ -4,5 +4,6 @@ public enum StatusName {
     PENDING,
     APPROVED,
     REJECTED,
-    CANCELED
+    CANCELED,
+    PROCESSED
 }

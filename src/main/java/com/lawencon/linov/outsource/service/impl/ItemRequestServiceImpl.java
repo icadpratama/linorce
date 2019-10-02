@@ -32,13 +32,14 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     @Override
-    public ItemRequest createItemRequest(ItemReqRequest request) {
+    public ItemRequest createItemRequest(ItemReqRequest request, User approver) {
         ItemRequest item = new ItemRequest();
 
         item.setName(request.getName());
         item.setQuantity(request.getQuantity());
         item.setDetails(request.getDetails());
         item.setImage(request.getImage());
+        item.setApprover(approver);
 
         return requestRepository.save(item);
     }

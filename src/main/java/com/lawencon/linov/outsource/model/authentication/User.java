@@ -1,5 +1,7 @@
 package com.lawencon.linov.outsource.model.authentication;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.lawencon.linov.outsource.model.approval.ItemRequest;
 import com.lawencon.linov.outsource.model.audit.DateAudit;
 import org.hibernate.annotations.NaturalId;
 

@@ -2,6 +2,7 @@ package com.lawencon.linov.outsource.model.approval;
 
 import com.lawencon.linov.outsource.model.Image;
 import com.lawencon.linov.outsource.model.audit.UserDateAudit;
+import com.lawencon.linov.outsource.model.authentication.User;
 import com.lawencon.linov.outsource.util.StatusName;
 
 import javax.persistence.*;
@@ -27,10 +28,19 @@ public class BusinessTrip extends UserDateAudit {
     private Image image;
 
     @Column(name = "approver")
-    private Long approver;
+    private User approver;
 
     @Column(name = "status")
     private StatusName status;
+
+    public BusinessTrip(Timestamp start, Timestamp end, String reason, Image image, User approver, StatusName status) {
+        this.start = start;
+        this.end = end;
+        this.reason = reason;
+        this.image = image;
+        this.approver = approver;
+        this.status = status;
+    }
 
     public Long getId() {
         return id;
@@ -72,11 +82,11 @@ public class BusinessTrip extends UserDateAudit {
         this.image = image;
     }
 
-    public Long getApprover() {
+    public User getApprover() {
         return approver;
     }
 
-    public void setApprover(Long approver) {
+    public void setApprover(User approver) {
         this.approver = approver;
     }
 

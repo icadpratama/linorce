@@ -2,7 +2,9 @@ package com.lawencon.linov.outsource.controller.authentication;
 
 import com.lawencon.linov.outsource.exception.ResourceNotFoundException;
 import com.lawencon.linov.outsource.model.Image;
+import com.lawencon.linov.outsource.model.authentication.Role;
 import com.lawencon.linov.outsource.model.authentication.User;
+import com.lawencon.linov.outsource.payload.response.OutsourceResponse;
 import com.lawencon.linov.outsource.payload.response.UserIdentityAvailability;
 import com.lawencon.linov.outsource.payload.response.UserProfile;
 import com.lawencon.linov.outsource.payload.response.UserSummary;
@@ -92,4 +94,10 @@ public class UserController {
         return new UserProfile(user.getId(), user.getUsername(), user.getFirstName(), user.getLastName(), user.getCreatedAt(), requestCount);
     }
 
+    @GetMapping("/hr")
+    @CrossOrigin(origins = "*")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_HR')")
+    public ResponseEntity listHr(){
+        return ResponseEntity.ok(userService.listHr(new Role()));
+    }
 }

@@ -35,14 +35,11 @@ public class ItemRequest extends UserDateAudit {
     @JoinColumn(name = "image_id", referencedColumnName = "id")
     private Image image;
 
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @Column(name = "approver")
-    private User userId;
+    private User approver;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10)
-    private StatusName statusName;
+    private StatusName status;
 
     public Long getId() {
         return id;
@@ -84,19 +81,19 @@ public class ItemRequest extends UserDateAudit {
         this.image = image;
     }
 
-    public User getUserId() {
-        return userId;
+    public User getApprover() {
+        return approver;
     }
 
-    public void setUserId(User userId) {
-        this.userId = userId;
+    public void setApprover(User approver) {
+        this.approver = approver;
     }
 
-    public StatusName getStatusName() {
-        return statusName;
+    public StatusName getStatus() {
+        return status;
     }
 
-    public void setStatusName(StatusName statusName) {
-        this.statusName = statusName;
+    public void setStatus(StatusName status) {
+        this.status = status;
     }
 }

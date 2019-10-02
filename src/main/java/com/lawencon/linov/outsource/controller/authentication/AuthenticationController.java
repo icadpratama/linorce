@@ -77,7 +77,7 @@ public class AuthenticationController {
         User user = new User(signUpRequest.getFirstName(), signUpRequest.getFirstName(), signUpRequest.getUsername(),
                 signUpRequest.getEmail(), signUpRequest.getPassword());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role userRole = roleService.setRole(RoleName.ROLE_USER)
+        Role userRole = roleService.setRole(RoleName.ROLE_HR)
                 .orElseThrow(() -> new AppException("User Role not set."));
         user.setRoles(Collections.singleton(userRole));
         User result = userService.crateUser(user);

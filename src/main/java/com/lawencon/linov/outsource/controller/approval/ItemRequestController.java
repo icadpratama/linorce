@@ -1,7 +1,9 @@
 package com.lawencon.linov.outsource.controller.approval;
 
+import com.lawencon.linov.outsource.exception.ResourceNotFoundException;
 import com.lawencon.linov.outsource.model.Image;
 import com.lawencon.linov.outsource.model.approval.ItemRequest;
+import com.lawencon.linov.outsource.model.authentication.User;
 import com.lawencon.linov.outsource.payload.request.ItemReqRequest;
 import com.lawencon.linov.outsource.payload.response.ItemRequestResponse;
 import com.lawencon.linov.outsource.payload.response.OutsourceResponse;
@@ -9,6 +11,7 @@ import com.lawencon.linov.outsource.security.CurrentUser;
 import com.lawencon.linov.outsource.security.UserPrincipal;
 import com.lawencon.linov.outsource.service.ImageService;
 import com.lawencon.linov.outsource.service.ItemRequestService;
+import com.lawencon.linov.outsource.service.UserService;
 import com.lawencon.linov.outsource.util.CommonUtil;
 import com.lawencon.linov.outsource.util.PageAndSort;
 import org.slf4j.Logger;
@@ -33,17 +36,20 @@ public class ItemRequestController {
 
     private final ItemRequestService requestService;
     private final ImageService imageService;
+    private final UserService userService;
 
     private static final Logger logger = LoggerFactory.getLogger(ItemRequestController.class);
 
-    public ItemRequestController(ItemRequestService requestService, ImageService imageService) {
+    public ItemRequestController(ItemRequestService requestService, ImageService imageService, UserService userService) {
         this.requestService = requestService;
         this.imageService = imageService;
+        this.userService = userService;
     }
 
     // Get all item requests
+    @CrossOrigin(origins = "*")
     @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_HR', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_HR', 'ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity getItemRequest(@CurrentUser UserPrincipal currentUser,
                                          @Valid PageAndSort model){
         Page result = requestService.getAllItemRequests(model);
@@ -51,6 +57,7 @@ public class ItemRequestController {
     }
 
     // Create an item request
+    @CrossOrigin(origins = "*")
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_HR')")
     public ResponseEntity createItemRequest(
@@ -58,7 +65,7 @@ public class ItemRequestController {
             @RequestParam(name = "description") String description,
             @RequestParam(value = "quantity") Integer quantity,
             @RequestParam(name = "file") MultipartFile file,
-            @RequestParam(name = "user_id") Long userId,
+            @RequestParam(name = "approver") Long userId,
             @CurrentUser UserPrincipal currentUser) {
 
         @NotNull
@@ -73,8 +80,13 @@ public class ItemRequestController {
 
             CommonUtil.fileUpload(bucketName,  objectName, data, size, contentType);
             Image image = imageService.uploadImage(new Image(objectName, bucketName, size, contentType));
+
+            User approver = userService.userById(userId).orElseThrow(
+                    () -> new ResourceNotFoundException("User","id", userId)
+            );
+
             ItemReqRequest itemRequest = new ItemReqRequest(name, quantity, description, image, userId);
-            ItemRequest request = requestService.createItemRequest(itemRequest);
+            ItemRequest request = requestService.createItemRequest(itemRequest, approver);
 
             location = ServletUriComponentsBuilder
                     .fromCurrentRequest().path("/{itemRequestId}")
@@ -89,7 +101,7 @@ public class ItemRequestController {
     }
 
     // Get item request detail
-    @GetMapping("/{itemRequestId}")
+    @GetMapping("/{id}")
     public ResponseEntity getItemRequestById(@CurrentUser UserPrincipal currentUser, @PathVariable Long id){
         ItemRequestResponse result = requestService.getItemRequestById(id, currentUser);
         return ResponseEntity.ok(result);
