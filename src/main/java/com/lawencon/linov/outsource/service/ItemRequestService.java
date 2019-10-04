@@ -9,6 +9,8 @@ import com.lawencon.linov.outsource.security.UserPrincipal;
 import com.lawencon.linov.outsource.util.PageAndSort;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface ItemRequestService {
 
     Page getAllItemRequests(PageAndSort model);

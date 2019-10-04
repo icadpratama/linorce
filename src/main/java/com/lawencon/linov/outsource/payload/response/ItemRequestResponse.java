@@ -12,6 +12,19 @@ public class ItemRequestResponse {
     private Instant creationDateTime;
     private String approver;
 
+    public ItemRequestResponse() {
+    }
+
+    public ItemRequestResponse(Long id, String name, Integer quantity, String details, String document, Instant creationDateTime, String approver) {
+        this.id = id;
+        this.name = name;
+        this.quantity = quantity;
+        this.details = details;
+        this.document = document;
+        this.creationDateTime = creationDateTime;
+        this.approver = approver;
+    }
+
     public Long getId() {
         return id;
     }

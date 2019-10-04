@@ -28,6 +28,8 @@ import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -53,6 +55,21 @@ public class ItemRequestController {
     public ResponseEntity getItemRequest(@CurrentUser UserPrincipal currentUser,
                                          @Valid PageAndSort model) {
         Page result = requestService.getAllItemRequests(model);
+
+        // Mapping to response
+        List<ItemRequest> ir = result.getContent();
+        List<ItemRequestResponse> response = new ArrayList<>();
+
+        ir.forEach(item->{
+            ItemRequestResponse data = new ItemRequestResponse();
+            data.setId(item.getId());
+            data.setName(item.getName());
+            data.setQuantity(item.getQuantity());
+            data.setDetails(item.getDetails());
+            data.setApprover(item.getApprover().getUsername());
+            response.add(data);
+        });
+
         return ResponseEntity.ok(result);
     }
 

@@ -57,6 +57,28 @@ public class OutsourceApplication {
     }
 
     @Bean
+    public Docket claim() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.lawencon.linov.outsource.controller.claim"))
+                .paths(PathSelectors.any())
+                .build()
+                .groupName("Claim")
+                .apiInfo(apiInfo());
+    }
+
+    @Bean
+    public Docket leave() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.lawencon.linov.outsource.controller.leave"))
+                .paths(PathSelectors.any())
+                .build()
+                .groupName("Leave")
+                .apiInfo(apiInfo());
+    }
+
+    @Bean
     public Docket authentication() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
