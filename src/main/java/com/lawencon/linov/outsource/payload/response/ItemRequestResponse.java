@@ -9,6 +9,7 @@ public class ItemRequestResponse {
     private UserSummary createdBy;
     private UserSummary approver;
     private Long creationDateTime;
+    private String status;
 
     public ItemRequestResponse() {
     }
@@ -85,5 +86,13 @@ public class ItemRequestResponse {
 
     public void setApprover(UserSummary approver) {
         this.approver = approver;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

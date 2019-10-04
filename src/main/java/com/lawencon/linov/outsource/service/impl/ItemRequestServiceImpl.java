@@ -46,6 +46,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         item.setDetails(request.getDetails());
         item.setImage(request.getImage());
         item.setApprover(approver);
+        item.setStatus(request.getStatus());
 
         return requestRepository.save(item);
     }
@@ -114,6 +115,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
             data.setCreatedBy(creatorSummary);
             data.setApprover(approverSummary);
             data.setCreationDateTime(item.getCreatedAt().toEpochMilli());
+            data.setStatus(item.getStatus().toString());
             response.add(data);
         });
 

@@ -91,10 +91,10 @@ public class OutsourceApplication {
 
     private ApiInfo apiInfo() {
         return new ApiInfo(
-                "LinovAttendance",
+                "Linorce",
                 "Outsource Management System.",
                 "0.1.0",
-                "Terms of service",
+                "Terms of Service",
                 new Contact("Irsyad Jamal Pratama Putra", "www.lawencon.com", "irsyadjpratamap@gmail.com"),
                 "License of API", "API license URL", Collections.emptyList());
     }

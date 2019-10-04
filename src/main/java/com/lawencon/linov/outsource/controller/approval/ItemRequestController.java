@@ -13,6 +13,7 @@ import com.lawencon.linov.outsource.service.ItemRequestService;
 import com.lawencon.linov.outsource.service.UserService;
 import com.lawencon.linov.outsource.util.CommonUtil;
 import com.lawencon.linov.outsource.util.PageAndSort;
+import com.lawencon.linov.outsource.util.StatusName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -85,7 +86,7 @@ public class ItemRequestController {
                     () -> new ResourceNotFoundException("User","id", userId)
             );
 
-            ItemReqRequest itemRequest = new ItemReqRequest(name, quantity, description, image, userId);
+            ItemReqRequest itemRequest = new ItemReqRequest(name, quantity, description, image, userId, StatusName.PENDING);
             ItemRequest request = requestService.createItemRequest(itemRequest, approver);
 
             location = ServletUriComponentsBuilder

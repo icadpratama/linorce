@@ -14,6 +14,14 @@ public class PagingAndSorting {
             direct = Sort.Direction.ASC;
         }
 
+        if (model.getDirection().equalsIgnoreCase("DESC")) {
+            direct = Sort.Direction.DESC;
+        }
+
+        if (model.getDirection().equalsIgnoreCase("ASC")) {
+            direct = Sort.Direction.ASC;
+        }
+
         if (model.getPage() == 0) {
             model.setPage(0);
         }

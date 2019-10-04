@@ -28,12 +28,13 @@ public class ItemReqRequest {
 
     private StatusName status;
 
-    public ItemReqRequest(@NotBlank(message = "item can't be blank") @Size(min = 3, max = 50, message = "name min length is 3 and max length is 50") String name, Integer quantity, @NotBlank(message = "details can't be blank") @Size(min = 10, max = 250, message = "details min length is 10 and max length is 250") String details, Image image, @NotBlank(message = "choose one approval") Long userId) {
+    public ItemReqRequest(@NotBlank(message = "item can't be blank") @Size(min = 3, max = 50, message = "name min length is 3 and max length is 50") String name, Integer quantity, @NotBlank(message = "details can't be blank") @Size(min = 10, max = 250, message = "details min length is 10 and max length is 250") String details, Image image, @NotBlank(message = "choose one approval") Long userId, StatusName status) {
         this.name = name;
         this.quantity = quantity;
         this.details = details;
         this.image = image;
         this.userId = userId;
+        this.status = status;
     }
 
     public Image getImage() {
