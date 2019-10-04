@@ -407,7 +407,7 @@ gradle-app.setting
 
 ### Gradle Patch ###
 **/build/
-src/main/resources/db/
+src/main/resources/db.migration/
 src/main/resources/application-dev.properties
 src/main/resources/application-prod.properties
 src/main/resources/application-sit.properties
