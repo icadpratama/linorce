@@ -20,9 +20,4 @@ public class ImageServiceImpl implements ImageService {
     public Image uploadImage(Image image) {
         return imageRepository.save(image);
     }
-
-    @Override
-    public Optional<Image> getImageById(Long id) {
-        return imageRepository.findById(id);
-    }
 }

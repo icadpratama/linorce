@@ -7,5 +7,4 @@ import java.util.Optional;
 public interface ImageService {
 
     Image uploadImage(Image image);
-    Optional<Image> getImageById(Long id);
 }
