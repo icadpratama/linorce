@@ -43,6 +43,18 @@ public class ItemRequest extends UserDateAudit {
     @Column(length = 10)
     private StatusName status;
 
+    public ItemRequest() {
+    }
+
+    public ItemRequest(@NotBlank(message = "item can't be blank") @Size(min = 3, max = 50, message = "name min length is 3 and max length is 50") String name, Integer quantity, @NotBlank(message = "details can't be blank") @Size(min = 10, max = 250, message = "details min length is 10 and max length is 250") String details, Image image, User approver, StatusName status) {
+        this.name = name;
+        this.quantity = quantity;
+        this.details = details;
+        this.image = image;
+        this.approver = approver;
+        this.status = status;
+    }
+
     public Long getId() {
         return id;
     }

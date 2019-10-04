@@ -25,15 +25,21 @@ public class BusinessTrip extends UserDateAudit {
     @Column(name = "reason")
     private String reason;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
     private Image image;
 
-    @Column(name = "approver")
-    private Long approver;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "approver", referencedColumnName = "user_id")
+    private User approver;
 
     @Column(name = "status")
     private StatusName status;
 
-    public BusinessTrip(Timestamp start, Timestamp end, String reason, Image image, Long approver, StatusName status) {
+    public BusinessTrip() {
+    }
+
+    public BusinessTrip(Timestamp start, Timestamp end, String reason, Image image, User approver, StatusName status) {
         this.start = start;
         this.end = end;
         this.reason = reason;
@@ -82,11 +88,11 @@ public class BusinessTrip extends UserDateAudit {
         this.image = image;
     }
 
-    public Long getApprover() {
+    public User getApprover() {
         return approver;
     }
 
-    public void setApprover(Long approver) {
+    public void setApprover(User approver) {
         this.approver = approver;
     }
 

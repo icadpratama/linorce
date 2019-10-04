@@ -2,6 +2,7 @@ package com.lawencon.linov.outsource.model.claim;
 
 import com.lawencon.linov.outsource.model.Image;
 import com.lawencon.linov.outsource.model.audit.UserDateAudit;
+import com.lawencon.linov.outsource.model.authentication.User;
 import com.lawencon.linov.outsource.util.StatusName;
 
 import javax.persistence.*;
@@ -20,13 +21,27 @@ public class FinancialClaim extends UserDateAudit {
     @Column(name = "reason")
     private String reason;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
     private Image image;
 
-    @Column(name = "approver")
-    private Long approver;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "approver", referencedColumnName = "user_id")
+    private User approver;
 
     @Column(name = "status")
     private StatusName status;
+
+    public FinancialClaim() {
+    }
+
+    public FinancialClaim(Long amount, String reason, Image image, User approver, StatusName status) {
+        this.amount = amount;
+        this.reason = reason;
+        this.image = image;
+        this.approver = approver;
+        this.status = status;
+    }
 
     public Long getId() {
         return id;
@@ -60,11 +75,11 @@ public class FinancialClaim extends UserDateAudit {
         this.image = image;
     }
 
-    public Long getApprover() {
+    public User getApprover() {
         return approver;
     }
 
-    public void setApprover(Long approver) {
+    public void setApprover(User approver) {
         this.approver = approver;
     }
 

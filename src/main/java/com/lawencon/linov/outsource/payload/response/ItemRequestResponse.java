@@ -10,6 +10,7 @@ public class ItemRequestResponse {
     private String document;
     private UserSummary createdBy;
     private Instant creationDateTime;
+    private String approver;
 
     public Long getId() {
         return id;
@@ -65,5 +66,13 @@ public class ItemRequestResponse {
 
     public void setCreationDateTime(Instant creationDateTime) {
         this.creationDateTime = creationDateTime;
+    }
+
+    public String getApprover() {
+        return approver;
+    }
+
+    public void setApprover(String approver) {
+        this.approver = approver;
     }
 }

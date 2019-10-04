@@ -51,7 +51,7 @@ public class ItemRequestController {
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_HR', 'ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity getItemRequest(@CurrentUser UserPrincipal currentUser,
-                                         @Valid PageAndSort model){
+                                         @Valid PageAndSort model) {
         Page result = requestService.getAllItemRequests(model);
         return ResponseEntity.ok(result);
     }
