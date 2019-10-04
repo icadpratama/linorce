@@ -1,12 +1,9 @@
 package com.lawencon.linov.outsource.payload.response;
 
-import com.lawencon.linov.outsource.model.Image;
-import com.lawencon.linov.outsource.model.authentication.User;
 import com.lawencon.linov.outsource.util.DayType;
 import com.lawencon.linov.outsource.util.LeaveType;
 import com.lawencon.linov.outsource.util.StatusName;
 
-import javax.persistence.*;
 import java.sql.Timestamp;
 
 public class LeaveApplicationResponse {

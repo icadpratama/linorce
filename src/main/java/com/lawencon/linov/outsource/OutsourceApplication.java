@@ -14,6 +14,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.annotation.PostConstruct;
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.TimeZone;
 
@@ -42,7 +43,7 @@ public class OutsourceApplication {
                 .paths(PathSelectors.any())
                 .build()
                 .groupName("Approval")
-                .apiInfo(apiInfo());
+                .apiInfo(apiInfo()).directModelSubstitute(Timestamp.class, Long.class);
     }
 
     @Bean
@@ -53,7 +54,7 @@ public class OutsourceApplication {
                 .paths(PathSelectors.any())
                 .build()
                 .groupName("Attendance")
-                .apiInfo(apiInfo());
+                .apiInfo(apiInfo()).directModelSubstitute(Timestamp.class, Long.class);
     }
 
     @Bean
@@ -64,7 +65,7 @@ public class OutsourceApplication {
                 .paths(PathSelectors.any())
                 .build()
                 .groupName("Claim")
-                .apiInfo(apiInfo());
+                .apiInfo(apiInfo()).directModelSubstitute(Timestamp.class, Long.class);
     }
 
     @Bean
@@ -75,7 +76,7 @@ public class OutsourceApplication {
                 .paths(PathSelectors.any())
                 .build()
                 .groupName("Leave")
-                .apiInfo(apiInfo());
+                .apiInfo(apiInfo()).directModelSubstitute(Timestamp.class, Long.class);
     }
 
     @Bean
@@ -86,7 +87,7 @@ public class OutsourceApplication {
                 .paths(PathSelectors.any())
                 .build()
                 .groupName("Authentication")
-                .apiInfo(apiInfo());
+                .apiInfo(apiInfo()).directModelSubstitute(Timestamp.class, Long.class);
     }
 
     private ApiInfo apiInfo() {
