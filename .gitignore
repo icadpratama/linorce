@@ -407,5 +407,9 @@ gradle-app.setting
 
 ### Gradle Patch ###
 **/build/
-
+src/main/resources/db/migration/
+src/main/resources/application-dev.properties
+src/main/resources/application-prod.properties
+src/main/resources/application-sit.properties
+src/main/resources/application-uat.properties
 # End of https://www.gitignore.io/api/java,linux,macos,maven,gradle,windows,intellij,java-web,code-java,mavensmate,forgegradle,sublimetext,intellij+all,intellij+iml,visualstudiocode
