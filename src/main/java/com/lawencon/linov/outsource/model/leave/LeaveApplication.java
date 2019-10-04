@@ -4,6 +4,7 @@ import com.lawencon.linov.outsource.model.Image;
 import com.lawencon.linov.outsource.model.audit.UserDateAudit;
 import com.lawencon.linov.outsource.model.authentication.User;
 import com.lawencon.linov.outsource.util.DayType;
+import com.lawencon.linov.outsource.util.LeaveType;
 import com.lawencon.linov.outsource.util.StatusName;
 
 import javax.persistence.*;
@@ -43,10 +44,10 @@ public class LeaveApplication extends UserDateAudit {
     @Column(name = "status")
     private StatusName status;
 
-    public LeaveApplication() {
-    }
+    @Column(name = "leave_type")
+    private LeaveType leaveType;
 
-    public LeaveApplication(Timestamp start, DayType startDayType, DayType endDayType, Timestamp end, String reason, Image image, User approver, StatusName status) {
+    public LeaveApplication(Timestamp start, DayType startDayType, DayType endDayType, Timestamp end, String reason, Image image, User approver, StatusName status, LeaveType leaveType) {
         this.start = start;
         this.startDayType = startDayType;
         this.endDayType = endDayType;
@@ -55,6 +56,7 @@ public class LeaveApplication extends UserDateAudit {
         this.image = image;
         this.approver = approver;
         this.status = status;
+        this.leaveType = leaveType;
     }
 
     public Long getId() {
@@ -127,5 +129,13 @@ public class LeaveApplication extends UserDateAudit {
 
     public void setStatus(StatusName status) {
         this.status = status;
+    }
+
+    public LeaveType getLeaveType() {
+        return leaveType;
+    }
+
+    public void setLeaveType(LeaveType leaveType) {
+        this.leaveType = leaveType;
     }
 }
