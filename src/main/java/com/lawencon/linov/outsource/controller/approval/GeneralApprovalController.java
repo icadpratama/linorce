@@ -37,6 +37,7 @@ public class GeneralApprovalController {
     public ResponseEntity getBusinessTrip(@CurrentUser UserPrincipal currentUser,
                                           @Valid PageAndSort model){
 //        Page result = approvalService.(model);
-        return ResponseEntity.ok(result);
+//        return ResponseEntity.ok(result);
+        return null;
     }
 }

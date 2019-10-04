@@ -62,6 +62,10 @@ public class User extends DateAudit {
     )
     private Set<Role> roles = new HashSet<>();
 
+    @OneToMany(mappedBy = "approver")
+    @JsonIgnore
+    private Set<ItemRequest> itemRequest = new HashSet<>();
+
     public User() {
     }
 
@@ -127,5 +131,13 @@ public class User extends DateAudit {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<ItemRequest> getItemRequest() {
+        return itemRequest;
+    }
+
+    public void setItemRequest(Set<ItemRequest> itemRequest) {
+        this.itemRequest = itemRequest;
     }
 }

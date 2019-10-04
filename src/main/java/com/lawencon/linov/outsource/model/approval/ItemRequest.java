@@ -35,6 +35,8 @@ public class ItemRequest extends UserDateAudit {
     @JoinColumn(name = "image_id", referencedColumnName = "id")
     private Image image;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "approver", referencedColumnName = "user_id")
     private User approver;
 
     @Enumerated(EnumType.STRING)
