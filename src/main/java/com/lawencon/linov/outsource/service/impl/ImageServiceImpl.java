@@ -5,6 +5,8 @@ import com.lawencon.linov.outsource.repository.ImageRepository;
 import com.lawencon.linov.outsource.service.ImageService;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ImageServiceImpl implements ImageService {
 
@@ -17,5 +19,10 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Image uploadImage(Image image) {
         return imageRepository.save(image);
+    }
+
+    @Override
+    public Optional<Image> getImageById(Long id) {
+        return imageRepository.findById(id);
     }
 }

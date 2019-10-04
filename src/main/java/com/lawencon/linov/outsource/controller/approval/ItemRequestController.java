@@ -4,9 +4,8 @@ import com.lawencon.linov.outsource.exception.ResourceNotFoundException;
 import com.lawencon.linov.outsource.model.Image;
 import com.lawencon.linov.outsource.model.approval.ItemRequest;
 import com.lawencon.linov.outsource.model.authentication.User;
+import com.lawencon.linov.outsource.payload.response.*;
 import com.lawencon.linov.outsource.payload.request.ItemReqRequest;
-import com.lawencon.linov.outsource.payload.response.ItemRequestResponse;
-import com.lawencon.linov.outsource.payload.response.OutsourceResponse;
 import com.lawencon.linov.outsource.security.CurrentUser;
 import com.lawencon.linov.outsource.security.UserPrincipal;
 import com.lawencon.linov.outsource.service.ImageService;
@@ -16,7 +15,6 @@ import com.lawencon.linov.outsource.util.CommonUtil;
 import com.lawencon.linov.outsource.util.PageAndSort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +26,7 @@ import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -54,23 +51,9 @@ public class ItemRequestController {
     @PreAuthorize("hasAnyRole('ROLE_HR', 'ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity getItemRequest(@CurrentUser UserPrincipal currentUser,
                                          @Valid PageAndSort model) {
-        Page result = requestService.getAllItemRequests(model);
 
-        // Mapping to response
-        List<ItemRequest> ir = result.getContent();
-        List<ItemRequestResponse> response = new ArrayList<>();
-
-        ir.forEach(item->{
-            ItemRequestResponse data = new ItemRequestResponse();
-            data.setId(item.getId());
-            data.setName(item.getName());
-            data.setQuantity(item.getQuantity());
-            data.setDetails(item.getDetails());
-            data.setApprover(item.getApprover().getUsername());
-            response.add(data);
-        });
-
-        return ResponseEntity.ok(result);
+        Map<String, ObjectResponse> responseMap = requestService.getAllItemRequests(model);
+        return ResponseEntity.ok(responseMap);
     }
 
     // Create an item request

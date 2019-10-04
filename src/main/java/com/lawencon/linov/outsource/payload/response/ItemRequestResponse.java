@@ -1,21 +1,19 @@
 package com.lawencon.linov.outsource.payload.response;
 
-import java.time.Instant;
-
 public class ItemRequestResponse {
     private Long id;
     private String name;
     private Integer quantity;
     private String details;
-    private String document;
+    private ImageSummary document;
     private UserSummary createdBy;
-    private Instant creationDateTime;
-    private String approver;
+    private UserSummary approver;
+    private Long creationDateTime;
 
     public ItemRequestResponse() {
     }
 
-    public ItemRequestResponse(Long id, String name, Integer quantity, String details, String document, Instant creationDateTime, String approver) {
+    public ItemRequestResponse(Long id, String name, Integer quantity, String details, ImageSummary document, Long creationDateTime, UserSummary approver) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;
@@ -57,11 +55,11 @@ public class ItemRequestResponse {
         this.details = details;
     }
 
-    public String getDocument() {
+    public ImageSummary getDocument() {
         return document;
     }
 
-    public void setDocument(String document) {
+    public void setDocument(ImageSummary document) {
         this.document = document;
     }
 
@@ -73,19 +71,19 @@ public class ItemRequestResponse {
         this.createdBy = createdBy;
     }
 
-    public Instant getCreationDateTime() {
+    public Long getCreationDateTime() {
         return creationDateTime;
     }
 
-    public void setCreationDateTime(Instant creationDateTime) {
+    public void setCreationDateTime(Long creationDateTime) {
         this.creationDateTime = creationDateTime;
     }
 
-    public String getApprover() {
+    public UserSummary getApprover() {
         return approver;
     }
 
-    public void setApprover(String approver) {
+    public void setApprover(UserSummary approver) {
         this.approver = approver;
     }
 }
