@@ -47,6 +47,9 @@ public class LeaveApplication extends UserDateAudit {
     @Column(name = "leave_type")
     private LeaveType leaveType;
 
+    public LeaveApplication() {
+    }
+
     public LeaveApplication(Timestamp start, DayType startDayType, DayType endDayType, Timestamp end, String reason, Image image, User approver, StatusName status, LeaveType leaveType) {
         this.start = start;
         this.startDayType = startDayType;
