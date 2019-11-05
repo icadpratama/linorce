@@ -18,6 +18,7 @@ public class LeaveApplicationResponse {
     private UserSummary approver;
     private StatusName status;
     private LeaveType leaveType;
+    private UserSummary createdBy;
 
     public Long getId() {
         return id;
@@ -97,5 +98,13 @@ public class LeaveApplicationResponse {
 
     public void setLeaveType(LeaveType leaveType) {
         this.leaveType = leaveType;
+    }
+
+    public UserSummary getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(UserSummary createdBy) {
+        this.createdBy = createdBy;
     }
 }

@@ -22,6 +22,10 @@
         </encoder>
     </appender>
 
+    <logger name="com.lawencon.linov.outsource" level="TRACE"/>
+    <logger name="org.hibernate.type" level="ALL" />
+    <logger name="org.hibernate" level="DEBUG" />
+
     <root level="error">
         <appender-ref ref="FILE-ROLLING"/>
     </root>
